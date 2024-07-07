@@ -3,22 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"next dev\" \"docker-compose up\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.4.1",
     "@nextui-org/react": "^2.4.2",
+    "@vinejs/vine": "^2.1.0",
+    "bcrypt": "^5.1.1",
+    "drizzle-orm": "^0.31.2",
     "framer-motion": "^11.2.13",
     "next": "14.2.4",
+    "next-auth": "^4.24.7",
+    "nodemailer": "^6.9.14",
+    "postgres": "^3.4.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "stream-chat": "^8.37.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "concurrently": "^8.2.2",
+    "drizzle-kit": "^0.22.8",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",
