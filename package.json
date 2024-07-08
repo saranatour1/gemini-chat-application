@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.4.1",
+    "@iconify/react": "^5.0.0",
+    "@nextui-org/card": "^2.0.31",
     "@nextui-org/react": "^2.4.2",
     "@vinejs/vine": "^2.1.0",
     "bcrypt": "^5.1.1",
@@ -19,6 +21,7 @@
     "framer-motion": "^11.2.13",
     "next": "14.2.4",
     "next-auth": "^4.24.7",
+    "next-themes": "^0.3.0",
     "nodemailer": "^6.9.14",
     "postgres": "^3.4.4",
     "react": "^18",

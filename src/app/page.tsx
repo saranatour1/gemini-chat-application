@@ -1,8 +1,8 @@
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        hi
+    <main className="w-full h-full min-h-full max-w-[1024px] grid grid-flow-row items-start justify-center mx-auto py-5">
+        {/* chat front page */}
     </main>
   );
 }
