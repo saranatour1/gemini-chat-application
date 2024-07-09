@@ -45,9 +45,8 @@ export const authOptions: AuthOptions = {
     },
   },
   events: {
-    async signIn(event) {
-      if (event.isNewUser && event.user.email) {
-        // return true
+    async signIn({isNewUser, user, account, profile}) {
+      if (isNewUser && user.email) {        
       }
     },
   },

@@ -4,10 +4,13 @@ import { Icon } from '@iconify/react';
 import { Button, Input } from "@nextui-org/react";
 import { FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
+import useNavigate from "@/hooks/useNavigate";
 
 export default function page(){
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [email, setEmail] = useState<string>('')
+  const [email, setEmail] = useState<string>('');
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const nav = useNavigate()
   
   const handleSubmit =(e:FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
@@ -15,7 +18,7 @@ export default function page(){
       {email , callbackUrl:'/dashboard'},
     )
   }
-
+  
   return (<div className="grid w-full h-full min-h-fit max-w-full py-4 px-24 justify-center items-center">
     <Card className="w-full max-w-[52rem] mt-32 p-8 ">
       <CardHeader className="w-full">
