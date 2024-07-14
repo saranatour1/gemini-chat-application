@@ -3,7 +3,7 @@ import { GitHubLogo } from "@/components/GithubIcon"
 import { Button } from "@/components/ui/button"
 import { useAuthActions } from "@convex-dev/auth/react";
 
-export const SIgnInWithGithub = ()=>{
+export const SignInWithGithub = ()=>{
   const { signIn } = useAuthActions();
   return(    <Button
     className="flex-1"

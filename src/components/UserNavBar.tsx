@@ -1,7 +1,4 @@
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,9 +25,8 @@ export const UserNavBar = ({children}:Props) => {
     <nav className="w-full h-full max-h flex items-end justify-end min-h-10">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="py-4 px-2 w-full max-w-fit ">
+          <Button variant="outline" className="py-4 px-2 w-full h-full max-w-fit max-h-fit flex items-center justify-center gap-x-4">
             {children}
-
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
