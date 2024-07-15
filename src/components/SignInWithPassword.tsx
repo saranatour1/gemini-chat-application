@@ -22,12 +22,7 @@ export const SignInWithPassword = ({
   const [submitting, setSubmitting] = useState(false);
   const { isLoading, isAuthenticated } = useConvexAuth();
   const nav = useRouter();
-  useEffect(() => {
-    console.log(isAuthenticated,isLoading)
-    if(!isLoading && isAuthenticated){
-      nav.push('/dashboard')
-    }
-  }, [isAuthenticated,isLoading]);
+
   return (
     <form
       className="flex flex-col"
