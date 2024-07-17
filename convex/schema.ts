@@ -18,10 +18,11 @@ const schema = defineSchema({
   }).index("channelId", ["channelId"])
   .index("userId", ["userId"]),
   messages: defineTable({
-    channelId: v.id("channel"),
+    channelId: v.id("channels"),
     senderId: v.id("users"),
     message: v.string(),
-  }).index("sender", ["senderId"]),
+  }).index("sender", ["senderId"])
+  .index('channelId',['channelId']),
 });
 
 export default schema;

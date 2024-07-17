@@ -3,14 +3,15 @@ import { mutation, query } from "./_generated/server";
 import { auth } from "./auth";
 
 export const viewer = query({
-  args: { chatId: v.id("chats") },
+  args: { chatId: v.id("channels") },
   handler: async (ctx, args)=> {
     try {
       if(!args.chatId){
         throw new ConvexError("please pick a valid chatId")
       }
+      const user =  await auth.getUserId(ctx)
       const chat = await ctx.db.query("messages")
-      .withIndex('chatId',(q)=> q.eq('chatId', args.chatId))
+      .withIndex('channelId',(q)=> q.eq('channelId', args.chatId))
       .order('desc')
       .collect()
       
@@ -28,10 +29,10 @@ export const viewer = query({
 });
 
 export const createMessage = mutation({
-  args: { chatId: v.id("chats"), content: v.string()},
+  args: { chatId: v.id("channels"), content: v.string()},
   handler: async (ctx, args) => {
     const user = await  auth.getUserId(ctx)
-    const newMessageId = await ctx.db.insert('messages', { chatId: args.chatId, message: args.content, senderId:user! });
+    const newMessageId = await ctx.db.insert('messages', { channelId: args.chatId, message: args.content, senderId:user! });
     return newMessageId;
   },
 });
