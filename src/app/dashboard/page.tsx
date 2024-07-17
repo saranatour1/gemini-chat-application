@@ -1,15 +1,9 @@
 "use client";
-import { UserNavBar } from "@/components/UserNavBar";
 import { Authenticated, Unauthenticated, useConvexAuth, useQuery } from "convex/react";
 import { Suspense, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { api } from "../../../convex/_generated/api";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PersonStandingIcon } from "lucide-react";
 import { MessagesSideBar } from "@/components/MessagesSideBar";
 import { ChatContent } from "@/components/ChatContent";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 export default function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks

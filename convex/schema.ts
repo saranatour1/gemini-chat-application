@@ -6,34 +6,22 @@ const schema = defineSchema({
   ...authTables,
   // Your other tables...
   profiles: defineTable({
-    userId: v.id("users"), // one to one
+    userId: v.id("users"),
     bio: v.string(),
   }).index("userId", ["userId"]),
-  // one user has many friends but 1 friend is connected to 1 user, one to many
-  friends: defineTable({
-    userId: v.id("users"),
-    friendId: v.id("users"),
-  })
-    .index("userId", ["userId"])
-    .index("friendId", ["friendId"]),
-  requests: defineTable({
-    senderId: v.id("users"),
-    receiverId: v.id("users"),
-    status: v.string(),
-  })
-    .index("senderId", ["senderId"])
-    .index("receiverId", ["receiverId"]),
-  chats: defineTable({
+  channels: defineTable({
     name: v.string(),
-    userIds: v.array(v.id("users")),
-  }).index("userIds", ["userIds"]),
+  }).index("name", ["name"]),
+  channelUsers: defineTable({
+    channelId: v.id("channels"),
+    userId: v.id("users"),
+  }).index("channelId", ["channelId"])
+  .index("userId", ["userId"]),
   messages: defineTable({
-    chatId: v.id("chats"),
+    channelId: v.id("channel"),
     senderId: v.id("users"),
     message: v.string(),
-  })
-    .index("senderId", ["senderId"])
-    .index("chatId", ["chatId"]),
+  }).index("sender", ["senderId"]),
 });
 
 export default schema;

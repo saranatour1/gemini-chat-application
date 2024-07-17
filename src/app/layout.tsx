@@ -3,13 +3,7 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Provider } from "@/components/Provider";
-import { Authenticated, useConvexAuth, useQuery } from "convex/react";
 import { UserNavBar } from "@/components/UserNavBar";
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { PersonStandingIcon } from "lucide-react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { api } from "../../convex/_generated/api";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
