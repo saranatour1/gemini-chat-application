@@ -1,7 +1,6 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { auth } from "./auth";
-import { Id } from "./_generated/dataModel";
 
 export const viewer = query({
   args: {},
@@ -11,10 +10,12 @@ export const viewer = query({
       const channelUsers = await ctx.db
         .query("channelUsers")
         .withIndex("userId", (q) => q.eq("userId", userId!))
+        .order("desc")
         .collect();
       const channelIds = channelUsers.map((cu) => cu.channelId);
+      // Todo: get the last message with author
       const channels = await Promise.all(channelIds.map((id) => ctx.db.get(id)));
-      return channels;
+      return channels.filter(i=> i!==null);
     } catch (e) {
       throw new ConvexError("something wrong happened while fetching messages");
     }
@@ -23,16 +24,14 @@ export const viewer = query({
 
 // create a channel
 export const createChat = mutation({
-  args: { name: v.string(), users: v.id("users") },
+  args: { name: v.string(), users: v.optional(v.id("users"))},
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
     const createdChannel = await ctx.db.insert("channels", {
       name: args.name,
     });
-    const allUsers = [args.users, userId].filter((i) => i !== null) as Id<"users">[];
-    const data = await Promise.all(
-      allUsers.map((id) => ctx.db.insert("channelUsers", { userId: id, channelId: createdChannel }))
-    );
+   
+    const data = await ctx.db.insert("channelUsers", { userId: userId!, channelId: createdChannel })
     return await ctx.db.get(createdChannel);
   },
 });
@@ -40,6 +39,10 @@ export const createChat = mutation({
 export const deleteChat = mutation({
   args: { channelId: v.id("channels") },
   handler: async (ctx, args_0) => {
+    const usersInChannel = await ctx.db.query('channelUsers')
+    .withIndex("channelId", (q)=> q.eq('channelId', args_0.channelId))
+    .collect();
+    const deleteUsers = await Promise.all(usersInChannel.map((item)=> ctx.db.delete(item._id)))
     return await ctx.db.delete(args_0.channelId);
   },
 });

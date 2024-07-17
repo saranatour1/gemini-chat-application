@@ -1,7 +1,7 @@
 "use client";
 import { Authenticated, Unauthenticated, useConvexAuth, useQuery } from "convex/react";
 import { Suspense, useEffect } from "react";
-import { MessagesSideBar } from "@/components/MessagesSideBar";
+import { MessagesSideBar } from "@/components/SideBar/MessagesSideBar";
 import { ChatContent } from "@/components/ChatContent";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import Link from "next/link";
@@ -13,10 +13,10 @@ export default function page() {
         <Suspense fallback={<p>loading..</p>}>
           <ResizablePanelGroup
             direction="horizontal"
-            className="grid grid-flow-col grid-cols-4 !w-full h-full items-start justify-evenly py-4 min-h-[84vh]"
+            className="grid grid-flow-col grid-cols-4 !w-full h-full items-start justify-evenly py-4 min-h-[84vh] gap-x-4"
           >
             <MessagesSideBar />
-            <ResizableHandle withHandle className="!h-full min-h-full" />
+            <ResizableHandle withHandle className="h-auto" />
             <ChatContent />
           </ResizablePanelGroup>
         </Suspense>
