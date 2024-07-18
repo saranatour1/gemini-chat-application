@@ -62,7 +62,7 @@ export const Chats = () => {
               key={idx}
             >
               <Avatar>
-                <AvatarImage className=" max-h-12 max-w-10" src="https://github.com/shadcn.png" />
+                <AvatarImage className=" max-h-12 max-w-10 rounded-full" src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
 
@@ -82,6 +82,7 @@ export const Chats = () => {
   );
 };
 
+// Todo: use Intl.RelativeTimeFormat() to format date longer than today
 export const TimeObject = ({time}:{time:number}) => {
   const timestamp = useMemo(() => {
     const timeC = new Date(time);
