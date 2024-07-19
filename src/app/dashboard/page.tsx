@@ -1,39 +1,34 @@
 "use client";
-import { UserNavBar } from "@/components/UserNavBar";
-import { useConvexAuth, useQuery } from "convex/react";
-import { Suspense, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { api } from "../../../convex/_generated/api";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PersonStandingIcon } from "lucide-react";
+import { Authenticated, Unauthenticated, useConvexAuth, useQuery } from "convex/react";
+import { Suspense, useEffect, useState } from "react";
+import { MessagesSideBar } from "@/components/SideBar/MessagesSideBar";
+import { ChatContent } from "@/components/content/ChatContent";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import Link from "next/link";
+import { Id } from "../../../convex/_generated/dataModel";
 export default function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { isLoading, isAuthenticated } = useConvexAuth();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const nav = useRouter();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const user = useQuery(api.users.viewer);
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    if(!isLoading && !isAuthenticated){
-      nav.push('/')
-    }
-  }, [isAuthenticated,isLoading]);
+  const [chatId, setChatId] = useState<Id<"channels">>()
   return (
-    <main className="w-full h-full max-w-full min-h-screen p-8">
-      <Suspense fallback={<p>loading..</p>}>
-        <UserNavBar>
-          {user?.name ?? user?.email ?? user?.phone ?? "Anonymous"}
-          <Avatar>
-            <AvatarImage src={user?.image} crossOrigin="" />
-            <AvatarFallback>
-              {" "}
-              <PersonStandingIcon />
-            </AvatarFallback>
-          </Avatar>
-        </UserNavBar>
-      </Suspense>
-    </main>
+    <>
+      <Authenticated>
+        <Suspense fallback={<p>loading..</p>}>
+          <ResizablePanelGroup
+            direction="horizontal"
+            className="grid grid-flow-col grid-cols-4 !w-full h-full items-start justify-evenly py-4 min-h-[84vh] gap-x-4"
+          >
+            <MessagesSideBar chatId={chatId as Id<"channels">} setChatId={setChatId} />
+            <ResizableHandle withHandle className="h-auto" />
+            <ChatContent chatId={chatId as Id<"channels">} />
+          </ResizablePanelGroup>
+        </Suspense>
+      </Authenticated>
+      <Unauthenticated>
+        <div className="w-full h-full grid grid-flow-row place-content-center p-4 my-24 text-center">
+          <p className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">Please sign in</p>
+          <Link href={"/"} className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">sign in</Link>
+        </div>
+      </Unauthenticated>
+    </>
   );
 }

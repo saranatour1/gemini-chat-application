@@ -8,3 +8,15 @@ export const viewer = query({
     return userId !== null ? ctx.db.get(userId) : null;
   },
 });
+
+export const list = query({
+  args: {},
+  handler: async (ctx) => {
+    const userDocs = await ctx.db.query("users").collect();
+    return userDocs.map((doc) => ({
+      _id: doc._id,
+      name: doc.name,
+      email: doc.email,
+    }));
+  },
+});
