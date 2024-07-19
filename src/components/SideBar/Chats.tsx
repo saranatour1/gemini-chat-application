@@ -9,15 +9,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, PlusCircle } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Id } from "../../../convex/_generated/dataModel";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
-export const Chats = () => {
+export const Chats = ({chatId , setChatId}:{chatId:Id<"channels">, setChatId:(id:Id<"channels">) => void}) => {
+  const [open, setOpen] = useState(false);
   const chats = useQuery(api.chats.viewer);
   const data = useMutation(api.chats.createChat);
 
@@ -26,12 +27,15 @@ export const Chats = () => {
     const form = new FormData(e.currentTarget);
     if (form.get("name")?.toString().length) {
       const newChannel = await data({ name: form.get("name") as unknown as string });
+      if (newChannel?._id) {
+        setOpen(false);
+      }
     }
   };
 
   return (
     <>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger className="ml-auto p-2">
           <Plus className="hover:rotate-45 transition-transform" />
         </DialogTrigger>
@@ -60,17 +64,15 @@ export const Chats = () => {
             <div
               className="w-full h-full max-h-12 p-2 hover:cursor-pointer hover:underline transition-all flex items-center justify-start gap-4"
               key={idx}
+              onClick={()=> setChatId(chat._id)}
             >
               <Avatar>
                 <AvatarImage className=" max-h-12 max-w-10 rounded-full" src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-
               <p className="flex items-center justify-between w-full">
                 <span>{chat?.name}</span>
-
-              <TimeObject time={chat._creationTime} />  
-                              
+                <TimeObject time={chat._creationTime} />
               </p>
             </div>
           ))
@@ -83,12 +85,12 @@ export const Chats = () => {
 };
 
 // Todo: use Intl.RelativeTimeFormat() to format date longer than today
-export const TimeObject = ({time}:{time:number}) => {
+export const TimeObject = ({ time }: { time: number }) => {
   const timestamp = useMemo(() => {
     const timeC = new Date(time);
-    const hours = timeC.getHours().toString().padStart(2, '0');
-    const minutes = timeC.getMinutes().toString().padStart(2, '0');
+    const hours = timeC.getHours().toString().padStart(2, "0");
+    const minutes = timeC.getMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes}`;
   }, [time]);
-  return <span>{timestamp}</span>
-}
+  return <span>{timestamp}</span>;
+};
