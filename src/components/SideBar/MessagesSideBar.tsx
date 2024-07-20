@@ -1,6 +1,5 @@
 import { ResizablePanel } from "@/components/ui/resizable"
 import { useQuery } from "convex/react"
-import { api } from "../../../convex/_generated/api"
 import { Chats } from "./Chats";
 import { Id } from "../../../convex/_generated/dataModel";
 
