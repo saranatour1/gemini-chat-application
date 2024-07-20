@@ -63,3 +63,12 @@ export const addUsersToChannel = mutation({
     return { message: "added user successfully" };
   },
 });
+
+// get chatInfotmation by Id 
+export const getChatById = query({
+  args:{chatId: v.id("channels")},
+  handler:async(ctx, args)=> {
+    const channelInformation = await ctx.db.get(args.chatId);
+    return channelInformation;
+  },
+})

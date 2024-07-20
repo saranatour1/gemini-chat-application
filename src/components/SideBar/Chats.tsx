@@ -1,70 +1,22 @@
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Id } from "../../../convex/_generated/dataModel";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { AddChannels } from "./AddChannels";
 
-export const Chats = ({chatId , setChatId}:{chatId:Id<"channels">, setChatId:(id:Id<"channels">) => void}) => {
-  const [open, setOpen] = useState(false);
+export const Chats = ({ chatId, setChatId }: { chatId: Id<"channels">; setChatId: (id: Id<"channels">) => void }) => {
   const chats = useQuery(api.chats.viewer);
-  const data = useMutation(api.chats.createChat);
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    if (form.get("name")?.toString().length) {
-      const newChannel = await data({ name: form.get("name") as unknown as string });
-      if (newChannel?._id) {
-        setOpen(false);
-      }
-    }
-  };
-
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger className="ml-auto p-2">
-          <Plus className="hover:rotate-45 transition-transform" />
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>create a new channel</DialogTitle>
-            <form className="w-full h-full flex flex-col items-start justify-center gap-y-2" onSubmit={handleSubmit}>
-              <Label className="flex flex-col items-start justify-center gap-y-2">
-                <span>Channel Name</span>
-                <Input name="name" />
-              </Label>
-              {/* Todo: create search users component  */}
-              {/* <Label>
-                  <span>users</span>
-                  <Input/>
-                </Label> */}
-              <Button type="submit">confirm</Button>
-            </form>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-
+      <AddChannels />
       <div className="w-full h-full grid grid-flow-row auto-rows-auto min-h-min">
         {chats?.length && chats.length > 0 ? (
           chats?.map((chat, idx) => (
             <div
               className="w-full h-full max-h-12 p-2 hover:cursor-pointer hover:underline transition-all flex items-center justify-start gap-4"
               key={idx}
-              onClick={()=> setChatId(chat._id)}
+              onClick={() => setChatId(chat._id)}
             >
               <Avatar>
                 <AvatarImage className=" max-h-12 max-w-10 rounded-full" src="https://github.com/shadcn.png" />

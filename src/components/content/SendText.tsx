@@ -26,8 +26,8 @@ export const SendText = ({chatId}:{chatId:Id<"channels">}) =>{
     }
   }
   return (
-  <form onSubmit={handleSubmit} className="mt-auto w-full flex items-center justify-evenly gap-x-4 p-4">
-    <Textarea className="" placeholder="Type your message here" name="message" value={message} onChange={(e)=>setMessage(e.currentTarget.value)}/>
+  <form onSubmit={handleSubmit} className="mt-auto w-full flex items-center justify-evenly gap-x-4 p-4 border-t">
+    <Textarea className="resize-none" placeholder="Type your message here" name="message" value={message} onChange={(e)=>setMessage(e.currentTarget.value)}/>
     <Button type="submit">
       send
     </Button>
