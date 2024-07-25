@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss"
-
 const config = {
   darkMode: ["class"],
   content: [
@@ -19,6 +18,8 @@ const config = {
     },
     extend: {
       colors: {
+        "gpt-grey":"#7d7d7d",
+        "gpt-bg":"#f9f9f9",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -74,7 +75,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography')],
 } satisfies Config
 
 export default config
