@@ -22,9 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(`w-full max-w-full min-h-screen flex flex-col items-start justify-start`, fontSans.className)}>
+      <body className={cn(`grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]`, fontSans.className)}>
         <Provider>{children}</Provider>
-        <Toaster />
+        {/* <Toaster /> */}
       </body>
     </html>
   );

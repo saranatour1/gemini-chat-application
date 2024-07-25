@@ -27,11 +27,11 @@ export const SignUp = () => {
     const password = formData.get("password")!.toString();
 
     if (!email || !password) {
-      toast({
-        variant: "destructive",
-        title: "Do not leave empty fields!",
-        action: <ToastAction altText="undo">Undo</ToastAction>,
-      });
+      // toast({
+      //   variant: "destructive",
+      //   title: "Do not leave empty fields!",
+      //   action: <ToastAction altText="undo">Undo</ToastAction>,
+      // });
       setSubmitting(false);
       return;
     }
@@ -44,7 +44,7 @@ export const SignUp = () => {
           flow === "signIn"
             ? "Could not sign in, did you mean to sign up?"
             : "Could not sign up, did you mean to sign in?";
-        toast({ variant: "destructive", title: title });
+        // toast({ variant: "destructive", title: title });
         setSubmitting(false);
       });
   };
