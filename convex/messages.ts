@@ -30,6 +30,7 @@ export const createMessage = mutation({
     await ctx.scheduler.runAfter(0, internal.messages.runModelResponse, {
       messageId: newMessage,
       threadId: args.threadId,
+      content: args.content,
     });
   },
 });
@@ -38,47 +39,63 @@ export const runModelResponse = internalMutation({
   args: {
     messageId: v.id("messages"),
     threadId: v.id("threads"),
+    content:v.string() // message to respond to
   },
   handler:async(ctx, args_0) =>{
-
+    const newMessageUpdate = await ctx.db.insert("messages",{
+      threadId:args_0.threadId,
+      message:"...",
+      author:{
+      role:"assistant",
+      },
+      state:"generating",
+    })
+    
+    await ctx.scheduler.runAfter(0,internal.messages.maintainStream,{
+      messageId:newMessageUpdate,
+      content: args_0.content,
+    })
   },
 });
 
 
+export const maintainStream = internalAction({
+  args: { content: v.string(), messageId: v.id("messages") },
+  handler: async (ctx, args) => {
+    let chunkedText = "";
+    const result = await model.generateContentStream(args.content);
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      chunkedText += chunkText;
+      await ctx.scheduler.runAfter(0, internal.messages.setUpMessage, {
+        messageId: args.messageId,
+        messageChunk: chunkText,
+      });
+    }
+    await ctx.scheduler.runAfter(0, internal.messages.finishJob, {
+      messageId: args.messageId,
+      completeMessage: chunkedText, // Send the complete message
+    });
+  },
+});
 
-// export const runModelResponse = internalAction({
-//   args: {
-//     messageId: v.id("messages"),
-//     threadId: v.id("threads"),
-//   },
-//   handler: async (ctx, args) => {
-//     let chunkedText = "";
+export const setUpMessage = internalMutation({
+  args: { messageId: v.id("messages"), messageChunk: v.string() },
+  handler: async (ctx, args_0) => {
+    const existingMessage = await ctx.db.get(args_0.messageId);
+    const updatedMessage = existingMessage!.message + args_0.messageChunk;
+    await ctx.db.patch(args_0.messageId, {
+      message: updatedMessage,
+    });
+  },
+});
 
-//     const newMessage = await ctx.db.get(args.messageId); // from user
-//     const newUpdatedMessage = await ctx.db.insert("messages", {
-//       threadId: args.threadId,
-//       author: {
-//         role: "assistant",
-//         // context: olderMessages,
-//       },
-//       state: "generating",
-//       message: "...",
-//     });
-
-//     const result = await model.generateContentStream(newMessage?.message!);
-
-//     for await (const chunk of result.stream) {
-//       const chunkText = chunk.text();
-//       chunkedText += chunkText;
-//       await ctx.db.patch(newUpdatedMessage, {
-//         message: chunkedText,
-//       });
-//     }
-
-//     await ctx.db.patch(newUpdatedMessage, {
-//       state: "success",
-//     });
-
-//     return {message:"success"}
-//   },
-// });
+export const finishJob = internalMutation({
+  args: { messageId: v.id("messages"), completeMessage: v.string() },
+  handler: async (ctx, args_0) => {
+    await ctx.db.patch(args_0.messageId, {
+      state: "success",
+      message: args_0.completeMessage, // Ensure the message is fully updated
+    });
+  },
+});
