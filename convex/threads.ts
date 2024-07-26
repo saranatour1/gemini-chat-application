@@ -28,11 +28,14 @@ export const createThread = mutation({
     // get logged in user
     const user = await auth.getUserId(ctx);
     // create a new thread
+    // const threadsUserIn = await getManyFrom(ctx.db,'threadsMembers','userId',user!)
+    // const threads = await Promise.all(threadsUserIn.map(item => ctx.db.get(item.threadId)));
+    
     const newThread = await ctx.db.insert("threads", {
       summary: "new chat",
     });
     // add user to thread
-    const addUserToThread = await ctx.db.insert("threadsMembers", {
+    await ctx.db.insert("threadsMembers", {
       threadId: newThread,
       userId: user!,
     });
