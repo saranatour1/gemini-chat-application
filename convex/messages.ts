@@ -1,12 +1,13 @@
 // get messages in thread
 import { v } from "convex/values";
-import { internalAction, internalMutation, mutation, query, action } from './_generated/server';
+import { internalAction, internalMutation, mutation, query, action, internalQuery } from "./_generated/server";
 import { auth } from "./auth";
 import { getAll, getManyFrom } from "convex-helpers/server/relationships";
 import { model } from "./model";
 import { Id } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
 import { DatabaseReader } from "./_generated/server";
+
 export const viewer = query({
   args: { threadId: v.id("threads") },
   handler: async (ctx, args_0) => {
@@ -25,8 +26,19 @@ export const createMessage = mutation({
       state: "generating",
       author: { role: "user", userId: user! },
     });
-    
-    
+
+    const firstMessage = await ctx.db
+      .query("messages")
+      .withIndex("threadId", (q) => q.eq("threadId", args.threadId))
+      .collect();
+
+    if (firstMessage.length === 1) {
+      await ctx.scheduler.runAfter(0, internal.messages.summarize, {
+        threadId: args.threadId,
+        firstMessage: firstMessage[0].message,
+      });
+    }
+
     await ctx.scheduler.runAfter(0, internal.messages.runModelResponse, {
       messageId: newMessage,
       threadId: args.threadId,
@@ -39,25 +51,24 @@ export const runModelResponse = internalMutation({
   args: {
     messageId: v.id("messages"),
     threadId: v.id("threads"),
-    content:v.string() // message to respond to
+    content: v.string(), // message to respond to
   },
-  handler:async(ctx, args_0) =>{
-    const newMessageUpdate = await ctx.db.insert("messages",{
-      threadId:args_0.threadId,
-      message:"...",
-      author:{
-      role:"assistant",
+  handler: async (ctx, args_0) => {
+    const newMessageUpdate = await ctx.db.insert("messages", {
+      threadId: args_0.threadId,
+      message: "...",
+      author: {
+        role: "assistant",
       },
-      state:"generating",
-    })
-    
-    await ctx.scheduler.runAfter(0,internal.messages.maintainStream,{
-      messageId:newMessageUpdate,
+      state: "generating",
+    });
+
+    await ctx.scheduler.runAfter(0, internal.messages.maintainStream, {
+      messageId: newMessageUpdate,
       content: args_0.content,
-    })
+    });
   },
 });
-
 
 export const maintainStream = internalAction({
   args: { content: v.string(), messageId: v.id("messages") },
@@ -96,6 +107,39 @@ export const finishJob = internalMutation({
     await ctx.db.patch(args_0.messageId, {
       state: "success",
       message: args_0.completeMessage, // Ensure the message is fully updated
+    });
+  },
+});
+
+export const summarize = internalAction({
+  args: { threadId: v.id("threads"), firstMessage: v.string() },
+  handler: async (ctx, args_0) => {
+    const prompt = `write a proper summary that describes the following message ${args_0.firstMessage}, make it small, straight to the point, no longer than 30 characters, don't type anything else other than chat title summary.`;
+
+    await ctx.scheduler.runAfter(5000, internal.messages.actionToSummarize, {
+      prompt: prompt,
+      threadId: args_0.threadId,
+    });
+  },
+});
+
+export const actionToSummarize = internalAction({
+  args: { prompt: v.string(), threadId: v.id("threads") },
+  handler: async (ctx, args_0) => {
+    const request = await model.generateContent(args_0.prompt);
+    const response = request.response.text();
+    await ctx.scheduler.runAfter(0, internal.messages.updateSummery, {
+      output: response,
+      id: args_0.threadId,
+    });
+  },
+});
+
+export const updateSummery = internalMutation({
+  args: { output: v.string(), id: v.id("threads") },
+  handler: async (ctx, args_0) => {
+    await ctx.db.patch(args_0.id, {
+      summary: args_0.output,
     });
   },
 });
