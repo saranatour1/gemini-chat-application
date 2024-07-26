@@ -1,7 +1,8 @@
 import { Doc } from "../../../convex/_generated/dataModel";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useHtml } from '../../hooks/useHtml';
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 interface Props {
   avatar?: string;
@@ -10,6 +11,7 @@ interface Props {
 export const Message = ({ message, avatar }: Props) => {
   const {html} = useHtml(message.message)
   return (
+    <Suspense fallback={<Skeleton className="flex items-start gap-4 p-4 h-auto w-full" />}>
     <div className="flex items-start gap-4 rounded-md bg-card p-4">
       <Avatar className="border w-10 h-10">
         <AvatarImage
@@ -23,9 +25,11 @@ export const Message = ({ message, avatar }: Props) => {
       </Avatar>
       <div className="grid gap-1">
         <p className="font-medium text-sm">{message.author.role === "user" ? `You` : `Assistant`}</p>
+        {!html && <Skeleton className="max-w-full h-10 w-[400px]"/> }
         <article className="prose w-full" dangerouslySetInnerHTML={{__html:html}}/> 
         <span className="sr-only">{message.state}</span>
       </div>
     </div>
+    </Suspense>
   );
 };
