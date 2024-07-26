@@ -18,7 +18,7 @@ export const viewer = query({
       ctx.db,
       threadsUserIsMemberIn.map((item) => item.threadId)
     );
-    return threads;
+    return threads.reverse();
   },
 });
 
