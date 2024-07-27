@@ -6,6 +6,7 @@ import { Header } from "./Content/Header";
 
 export const SignedIn = ({ children }: Children) => {
   return (
+    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
     <Authenticated>
       <Aside />
       <div className="flex flex-col">
@@ -13,5 +14,6 @@ export const SignedIn = ({ children }: Children) => {
       {children}
       </div>
     </Authenticated>
+    </div>
   );
 };

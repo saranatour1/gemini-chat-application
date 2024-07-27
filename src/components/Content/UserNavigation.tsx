@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useQuery } from "convex/react"
 import { api } from "../../../convex/_generated/api"
 import { useAuthActions } from "@convex-dev/auth/react"
+import Link from "next/link"
 
 export const UserNavigation = ()=>{
   const  user = useQuery(api.users.viewer);
@@ -24,10 +25,13 @@ export const UserNavigation = ()=>{
     <DropdownMenuContent align="end">
       <DropdownMenuLabel>My Account</DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>Settings</DropdownMenuItem>
-      <DropdownMenuItem>Support</DropdownMenuItem>
+      <DropdownMenuItem>
+        <Link  href={`/settings`}>
+        Settings
+        </Link>
+        </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem onClick={()=> void signOut()}>Logout</DropdownMenuItem>
+      <DropdownMenuItem className="hover:cursor-pointer" onClick={()=> void signOut()}>Logout</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>)
 }
