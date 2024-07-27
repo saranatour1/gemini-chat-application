@@ -1,4 +1,4 @@
-import { Menu, Link, Package2, Home, ShoppingCart, Badge, Package, Users, LineChart } from "lucide-react";
+import { Menu, Link } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui/card";
 import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
