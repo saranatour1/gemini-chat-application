@@ -1,14 +1,13 @@
 import { Doc } from "../../../convex/_generated/dataModel";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useHtml } from '../../hooks/useHtml';
-import { ReactNode } from "react";
-
 interface Props {
   avatar?: string;
   message: Doc<"messages">;
 }
 export const Message = ({ message, avatar }: Props) => {
   const {html} = useHtml(message.message)
+
   return (
     <div className="flex items-start gap-4 rounded-md bg-card p-4">
       <Avatar className="border w-10 h-10">
