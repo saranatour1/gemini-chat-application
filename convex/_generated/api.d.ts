@@ -18,6 +18,7 @@ import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as messages from "../messages.js";
 import type * as model from "../model.js";
+import type * as settings from "../settings.js";
 import type * as threads from "../threads.js";
 import type * as users from "../users.js";
 
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   messages: typeof messages;
   model: typeof model;
+  settings: typeof settings;
   threads: typeof threads;
   users: typeof users;
 }>;

@@ -9,15 +9,11 @@ const schema = defineSchema({
     userId: v.id("users"),
     responseType: v.union(v.literal("chat"), v.literal("single-message")),
     theme: v.union(v.literal("dark"), v.literal("light")),
-    keepChat: v.string(), // How long to keep the chats for // max of 30 days
-    attachments: v.union(
-      v.object({
+    keepChat: v.number(), // How long to keep the chats for // max of 30 days
+    attachments:v.object({
         audio: v.boolean(),
-      }),
-      v.object({
         images: v.boolean(),
-      })
-    ),
+      }),
     model: v.union(
       v.literal("gemini-1.5-pro"),
       v.literal("gemini-1.5-flash"),

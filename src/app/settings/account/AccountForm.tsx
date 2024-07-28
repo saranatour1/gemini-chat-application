@@ -1,62 +1,100 @@
-"use client"
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon, Calendar, Command, CheckIcon } from 'lucide-react';
-import { format } from 'path';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { RxCaretSort } from "react-icons/rx";
-import { CommandInput, CommandEmpty, CommandList, CommandGroup, CommandItem } from '@/components/ui/command';
+"use client";;
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import { Calendar } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const
-
-const accountFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "Name must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Name must not be longer than 30 characters.",
-    }),
-  dob: z.date({
-    required_error: "A date of birth is required.",
-  }),
-  language: z.string({
-    required_error: "Please select a language.",
-  }),
-})
-
-type AccountFormValues = z.infer<typeof accountFormSchema>
-
-// This can come from your database or API.
-const defaultValues: Partial<AccountFormValues> = {
-  // name: "Your name",
-  // dob: new Date("2023-01-23"),
-}
-
+const languagesSet: [string, ...string[]] = [
+  "ar",
+  "bg",
+  "bn",
+  "zh",
+  "hr",
+  "cs",
+  "da",
+  "nl",
+  "en",
+  "et",
+  "fi",
+  "fr",
+  "de",
+  "el",
+  "iw",
+  "hi",
+  "hu",
+  "id",
+  "it",
+  "ja",
+  "ko",
+  "lv",
+  "lt",
+  "no",
+  "pl",
+  "pt",
+  "ro",
+  "ru",
+  " sr",
+  "sk",
+  "sl",
+  "es",
+  "sw",
+  "sv",
+  "th",
+  "tr",
+  "uk",
+  "vi",
+];
 export function AccountForm() {
+  const settings = useQuery(api.settings.viewer);
+  const accountFormSchema = z.object({
+    responseType: z.enum(["chat", "single-message"]).default(settings?.responseType ?? "single-message"),
+    keepChat: z
+      .number()
+      .max(Date.now() + 30 * 86400000)
+      .min(Date.now() + 86400000)
+      .default(settings?.keepChat ?? Date.now()),
+    attachments: z.object({
+      audio: z.boolean().default(settings?.attachments.audio ?? false),
+      images: z.boolean().default(settings?.attachments.images ?? false),
+    }),
+    model: z
+      .enum(["gemini-1.5-pro", "gemini-1.5-flash", "gemini-1.0-pro", "text-embedding-004", "aqa"])
+      .default(settings?.model ?? "gemini-1.0-pro"),
+    languages: z.enum(languagesSet).default(settings?.languages ?? "en"),
+    theme: z.enum(["light", "dark"]).default(settings?.theme ?? "light"),
+  });
+
+  type AccountFormValues = z.infer<typeof accountFormSchema>;
+
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
-    defaultValues,
-  })
+    defaultValues: {
+      attachments: {
+        audio: false,
+        images: false,
+      },
+    },
+  });
 
   function onSubmit(data: AccountFormValues) {
+    console.log(data);
     console.log({
       title: "You submitted the following values:",
       description: (
@@ -64,7 +102,7 @@ export function AccountForm() {
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
-    })
+    });
   }
 
   return (
@@ -72,130 +110,183 @@ export function AccountForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="name"
+          name="responseType"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
+            <FormItem className="flex flex-col">
+              <FormLabel>Response Type</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" {...field} />
+                <Select onValueChange={(value) => field.onChange(form.setValue("responseType", value))}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="response type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["chat", "single-message"].map((response, idx) => (
+                      <SelectItem key={idx} value={response}>
+                        {response}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
-              <FormDescription>
-                This is the name that will be displayed on your profile and in
-                emails.
-              </FormDescription>
+              <FormDescription>This is the response type that will be used in the dashboard.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="dob"
+          name="keepChat"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                Your date of birth is used to calculate your age.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="language"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Language</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
+              <FormLabel>Keep Chat Until</FormLabel>
+              <FormControl>
+                <Popover>
+                  <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      role="combobox"
                       className={cn(
-                        "w-[200px] justify-between",
+                        "w-[280px] justify-start text-left font-normal",
                         !field.value && "text-muted-foreground"
                       )}
                     >
-                      {field.value
-                        ? languages.find(
-                            (language) => language.value === field.value
-                          )?.label
-                        : "Select language"}
-                      <RxCaretSort className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {field.value ? format(new Date(field.value), "PPP") : <span>Pick a date</span>}
                     </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search language..." />
-                    <CommandEmpty>No language found.</CommandEmpty>
-                    <CommandList>
-                      <CommandGroup>
-                        {languages.map((language) => (
-                          <CommandItem
-                            value={language.label}
-                            key={language.value}
-                            onSelect={() => {
-                              form.setValue("language", language.value)
-                            }}
-                          >
-                            <CheckIcon
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                language.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {language.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                This is the language that will be used in the dashboard.
-              </FormDescription>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={field.value ? new Date(field.value) : undefined}
+                      onSelect={(date: Date) => field.onChange(date.getTime())}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </FormControl>
+              <FormDescription>This is the date until the chat will be kept.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="attachments"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Attachments</FormLabel>
+              <FormControl>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">Attachments</Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Add attachments</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      checked={field.value?.audio ?? false}
+                      onCheckedChange={(checked) => field.onChange({ ...field.value, audio: checked })}
+                    >
+                      Audio
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={field.value?.images ?? false}
+                      onCheckedChange={(checked) => field.onChange({ ...field.value, images: checked })}
+                    >
+                      Images
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </FormControl>
+              <FormDescription>Adding attachments</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="model"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Model</FormLabel>
+              <FormControl>
+                <Select onValueChange={(value) => field.onChange(form.setValue("model", value))}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="model type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["gemini-1.5-pro", "gemini-1.5-flash", "gemini-1.0-pro", "text-embedding-004", "aqa"].map(
+                      (response, idx) => (
+                        <SelectItem key={idx} value={response}>
+                          {response}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>This is the model type that will be used in the dashboard.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="languages"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>languages</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={(value) => field.onChange(form.setValue("languages", value))}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="languages" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {languagesSet.map((response, idx) => (
+                      <SelectItem key={idx} value={response}>
+                        {response}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>This is the languages that will be used in the dashboard.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="theme"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>theme</FormLabel>
+              <FormControl>
+                <Select value={field.value} onValueChange={(value) => field.onChange(form.setValue("theme", value))}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="theme" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["dark", "light"].map((response, idx) => (
+                      <SelectItem key={idx} value={response}>
+                        {response}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>This is the theme that will be used in the dashboard.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit">Update account</Button>
       </form>
     </Form>
-  )
+  );
 }

@@ -5,12 +5,13 @@ import { SidebarNav } from "./compoents/SideNavBar"
 import { UserNavigation } from "@/components/Content/UserNavigation"
 import Link from "next/link"
 import { IoArrowBack } from "react-icons/io5";
-
+import { AuthenticatedClient } from "@/components/AuthenticadClient"
+import { NotSignedIn } from "@/components/NotSignedIn"
 
 
 export const metadata: Metadata = {
-  title: "Forms",
-  description: "Advanced form example using react-hook-form and Zod.",
+  title: "settings",
+  description: "set up the settings for this page.",
 }
 
 const sidebarNavItems = [
@@ -31,6 +32,7 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <>    
+    <AuthenticatedClient>    
       <div className="md:hidden">
         <Image
           src="/examples/forms-light.png"
@@ -68,6 +70,8 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
           <div className="flex-1 lg:max-w-2xl">{children}</div>
         </div>
       </div>
+    </AuthenticatedClient>
+    <NotSignedIn />
     </>
   )
 }
