@@ -42,3 +42,17 @@ export const createThread = mutation({
     return newThread;
   },
 });
+
+export const getLast = query({
+  args: {},
+  handler: async (ctx, args_0) => {
+    const user = await auth.getUserId(ctx);
+    const userIsMember = await ctx.db
+      .query("threadsMembers")
+      .withIndex("userId", (q) => q.eq("userId", user!))
+      .order("desc")
+      .first();
+    const thread = await ctx.db.query("threads").withIndex("by_id", (q) => q.eq("_id", userIsMember!.threadId));
+    return thread;
+  },
+});

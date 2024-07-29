@@ -1,4 +1,5 @@
-import { query } from "./_generated/server";
+import { v } from "convex/values";
+import { mutation, query } from "./_generated/server";
 import { auth } from "./auth";
 
 export const viewer = query({
@@ -8,3 +9,14 @@ export const viewer = query({
     return ctx.db.get(userId!);
   },
 })
+
+export const updateName = mutation({
+  args:{name:v.string()},
+  handler:async(ctx, args_0)=> {
+    const user = await auth.getUserId(ctx);
+    await ctx.db.patch(user!,{
+      name: args_0.name
+    })
+  },
+})
+

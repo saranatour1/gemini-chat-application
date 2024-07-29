@@ -6,8 +6,16 @@ import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { AwardIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 export const ToggleBtns = () => {
   const addChat = useMutation(api.threads.createThread);
+  const nav = useRouter();
+  const directToLast = async()=>{
+    const lastId = await addChat()
+    if(lastId){
+      nav.push(`/dashboard/${lastId}`)
+    }
+  }
   return (
     <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
       <TooltipProvider>
@@ -27,7 +35,7 @@ export const ToggleBtns = () => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="outline" size="icon" className="ml-auto h-8 w-8" onClick={() => addChat()}>
+            <Button variant="outline" size="icon" className="ml-auto h-8 w-8" onClick={directToLast}>
               <FaEdit className="text-gpt-grey" />
               <span className="sr-only">Add new chat</span>
             </Button>
