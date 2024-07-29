@@ -1,5 +1,4 @@
 import { NotSignedIn } from "@/components/NotSignedIn";
-import { Aside } from "@/components/SideBar/Aside";
 import { SignedIn } from "@/components/SignedIn";
 import { Children } from "@/types";
 
