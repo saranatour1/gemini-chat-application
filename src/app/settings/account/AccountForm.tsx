@@ -8,7 +8,7 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Calendar } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -20,91 +20,43 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { accountFormSchema, languagesSet, Model, models, Response, responses } from "./constants";
+import { useEffect } from "react";
+import { Doc, Id } from "../../../../convex/_generated/dataModel";
 
-const languagesSet: [string, ...string[]] = [
-  "ar",
-  "bg",
-  "bn",
-  "zh",
-  "hr",
-  "cs",
-  "da",
-  "nl",
-  "en",
-  "et",
-  "fi",
-  "fr",
-  "de",
-  "el",
-  "iw",
-  "hi",
-  "hu",
-  "id",
-  "it",
-  "ja",
-  "ko",
-  "lv",
-  "lt",
-  "no",
-  "pl",
-  "pt",
-  "ro",
-  "ru",
-  " sr",
-  "sk",
-  "sl",
-  "es",
-  "sw",
-  "sv",
-  "th",
-  "tr",
-  "uk",
-  "vi",
-];
 export function AccountForm() {
+  const createSettings = useMutation(api.settings.createUserSettings)
+  const updateSettings = useMutation(api.settings.update)
   const settings = useQuery(api.settings.viewer);
-  const accountFormSchema = z.object({
-    responseType: z.enum(["chat", "single-message"]).default(settings?.responseType ?? "single-message"),
-    keepChat: z
-      .number()
-      .max(Date.now() + 30 * 86400000)
-      .min(Date.now() + 86400000)
-      .default(settings?.keepChat ?? Date.now()),
-    attachments: z.object({
-      audio: z.boolean().default(settings?.attachments.audio ?? false),
-      images: z.boolean().default(settings?.attachments.images ?? false),
-    }),
-    model: z
-      .enum(["gemini-1.5-pro", "gemini-1.5-flash", "gemini-1.0-pro", "text-embedding-004", "aqa"])
-      .default(settings?.model ?? "gemini-1.0-pro"),
-    languages: z.enum(languagesSet).default(settings?.languages ?? "en"),
-    theme: z.enum(["light", "dark"]).default(settings?.theme ?? "light"),
-  });
+  const formSchema = accountFormSchema(settings as Doc<"settings">)
 
-  type AccountFormValues = z.infer<typeof accountFormSchema>;
+  type AccountFormValues = z.infer<typeof formSchema>;
 
   const form = useForm<AccountFormValues>({
-    resolver: zodResolver(accountFormSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      attachments: {
-        audio: false,
-        images: false,
+      model:settings?.model ?? "gemini-1.0-pro",
+      languages: settings?.languages ?? "en",
+      theme: settings?.theme ?? "light",
+      attachments:{
+        audio: settings?.attachments.audio ?? false,
+        images:settings?.attachments.images ?? false,
       },
+      keepChat: settings?.keepChat ?? (Date.now()+ 604800), // 1 week 
+      responseType: settings?.responseType ?? "single-message",
     },
   });
 
   function onSubmit(data: AccountFormValues) {
-    console.log(data);
-    console.log({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    updateSettings({settingsId:settings?._id as Id<"settings">, body: data as Partial<Doc<"settings">>})
   }
 
+  useEffect(() => {
+    console.log(settings, "settings");
+    if(settings === null){
+      createSettings()
+    }
+  }, [settings]);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -115,12 +67,12 @@ export function AccountForm() {
             <FormItem className="flex flex-col">
               <FormLabel>Response Type</FormLabel>
               <FormControl>
-                <Select onValueChange={(value) => field.onChange(form.setValue("responseType", value))}>
+                <Select onValueChange={(value:Response) => field.onChange(form.setValue("responseType", value))}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="response type" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["chat", "single-message"].map((response, idx) => (
+                    {responses.map((response, idx) => (
                       <SelectItem key={idx} value={response}>
                         {response}
                       </SelectItem>
@@ -156,8 +108,8 @@ export function AccountForm() {
                   <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
-                      selected={field.value ? new Date(field.value) : undefined}
-                      onSelect={(date: Date) => field.onChange(date.getTime())}
+                      selected={field.value ? new Date(field.value):undefined}
+                      onSelect={(date: Date|undefined) => field.onChange((date as Date).getTime())}
                       initialFocus
                     />
                   </PopoverContent>
@@ -172,7 +124,7 @@ export function AccountForm() {
           control={form.control}
           name="attachments"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col items-start justify-start gap-y-2">
               <FormLabel>Attachments</FormLabel>
               <FormControl>
                 <DropdownMenu>
@@ -209,12 +161,12 @@ export function AccountForm() {
             <FormItem className="flex flex-col">
               <FormLabel>Model</FormLabel>
               <FormControl>
-                <Select onValueChange={(value) => field.onChange(form.setValue("model", value))}>
+                <Select onValueChange={(value:Model) => field.onChange(form.setValue("model", value))}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="model type" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["gemini-1.5-pro", "gemini-1.5-flash", "gemini-1.0-pro", "text-embedding-004", "aqa"].map(
+                    {models.map(
                       (response, idx) => (
                         <SelectItem key={idx} value={response}>
                           {response}
@@ -266,7 +218,8 @@ export function AccountForm() {
             <FormItem className="flex flex-col">
               <FormLabel>theme</FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={(value) => field.onChange(form.setValue("theme", value))}>
+                <Select value={field.value} 
+                onValueChange={(value:"light"|"dark") => field.onChange(form.setValue("theme", value))}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="theme" />
                   </SelectTrigger>
