@@ -35,7 +35,7 @@ export function AccountForm() {
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      model:settings?.model ?? "gemini-1.0-pro",
+      // model:settings?.model ?? "gemini-1.0-pro",
       languages: settings?.languages ?? "en",
       theme: settings?.theme ?? "light",
       attachments:{
@@ -43,11 +43,12 @@ export function AccountForm() {
         images:settings?.attachments.images ?? false,
       },
       keepChat: settings?.keepChat ?? (Date.now()+ 604800), // 1 week 
-      responseType: settings?.responseType ?? "single-message",
+      // responseType: settings?.responseType ?? "single-message",
     },
   });
 
   function onSubmit(data: AccountFormValues) {
+    // console.log(data)
     updateSettings({settingsId:settings?._id as Id<"settings">, body: data as Partial<Doc<"settings">>})
   }
 
@@ -67,7 +68,7 @@ export function AccountForm() {
             <FormItem className="flex flex-col">
               <FormLabel>Response Type</FormLabel>
               <FormControl>
-                <Select onValueChange={(value:Response) => field.onChange(form.setValue("responseType", value))}>
+                <Select onValueChange={(value:Response) => form.setValue("responseType",value)}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="response type" />
                   </SelectTrigger>
@@ -161,7 +162,7 @@ export function AccountForm() {
             <FormItem className="flex flex-col">
               <FormLabel>Model</FormLabel>
               <FormControl>
-                <Select onValueChange={(value:Model) => field.onChange(form.setValue("model", value))}>
+                <Select onValueChange={(value:Model) => form.setValue('model',value)}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="model type" />
                   </SelectTrigger>
