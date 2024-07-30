@@ -15,7 +15,7 @@ export const runModelResponses = async(ctx:MutationCtx, messageId:Id<"messages">
 
   if (settings.responseType === "single-message") {
     await ctx.scheduler.runAfter(0, internal.messages.singleMessageResponse,{
-      messageId:messageId,
+      messageId:newMessageUpdate,
       content:content,
       threadId:threadId,
       settings:settings

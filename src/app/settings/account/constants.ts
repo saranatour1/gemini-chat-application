@@ -56,8 +56,8 @@ export const accountFormSchema = (settings: Doc<"settings">) => {
       images: z.boolean().default(settings?.attachments.images ?? false),
     }),
     model: z
-      .enum(["gemini-1.5-pro", "gemini-1.5-flash", "gemini-1.0-pro", "text-embedding-004", "aqa"])
-      .default(settings?.model ?? "gemini-1.0-pro"),
+      .enum(["gemini-1.0-pro","gemini-1.0-pro-latest","gemini-1.0-pro-001","gemini-1.5-flash","gemini-1.5-flash-latest","gemini-1.5-pro-latest","gemini-1.5-pro"])
+      .default(settings?.model ?? "gemini-1.0-pro-latest"),
     languages: z.enum(languagesSet).default(settings?.languages ?? "en"),
     theme: z.enum(["light", "dark"]).default(settings?.theme ?? "light"),
   });
@@ -66,5 +66,5 @@ export const accountFormSchema = (settings: Doc<"settings">) => {
 export const responses: readonly string[] = ["chat", "single-message"];
 export type Response = "chat"| "single-message"
 
-export const models:readonly string[] = ["gemini-1.5-pro", "gemini-1.5-flash", "gemini-1.0-pro", "text-embedding-004", "aqa"]
-export type Model = "gemini-1.5-pro"| "gemini-1.5-flash"| "gemini-1.0-pro"| "text-embedding-004"| "aqa"
+export const models:readonly string[] = ["gemini-1.0-pro","gemini-1.0-pro-latest","gemini-1.0-pro-001","gemini-1.5-flash","gemini-1.5-flash-latest","gemini-1.5-pro-latest","gemini-1.5-pro"]
+export type Model = "gemini-1.0-pro"|"gemini-1.0-pro-latest"|"gemini-1.0-pro-001"|"gemini-1.5-flash"|"gemini-1.5-flash-latest"|"gemini-1.5-pro-latest"|"gemini-1.5-pro"

@@ -4,7 +4,6 @@ import { QueryCtx } from "./_generated/server";
 
 const apiKey = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey as string);
-
 export const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
 
 export const generationConfig = {
@@ -18,14 +17,14 @@ export const generationConfig = {
 // export const model = genAI.getGenerativeModel({ model:  });
 // return a response of a stream for a single message
 export const singleMessageChat = async (message: string, settings: Partial<Doc<"settings">>) => {
-  model.model = settings.model as string
+  // model.model = settings.model as string
   const result = await model.generateContentStream(message);
   return result;
 };
 
 export const singleOutputResponse = async (message: string, settings: Partial<Doc<"settings">>) => {
   // const model = genAI.getGenerativeModel({ model: settings.model as string });
-  model.model = settings.model as string
+  // model.model = settings.model as string
   const result = await model.generateContent(message);
   return result;
 };
@@ -33,7 +32,7 @@ export const singleOutputResponse = async (message: string, settings: Partial<Do
 // all chat
 export const chatResponse = async (messages: Doc<"messages">[], settings: Partial<Doc<"settings">>) => {
   // const model = genAI.getGenerativeModel({ model: settings.model as string});
-  model.model = settings.model as string
+  // model.model = settings.model as string
   const history:Content[] = messages.map((singleMessage, index) => {
     return {
       role: singleMessage.author.role === "assistant" ? "model" : "user",

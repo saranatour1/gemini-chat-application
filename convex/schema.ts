@@ -12,7 +12,7 @@ export const settingsSchema = {
       audio: v.boolean(),
       images: v.boolean(),
     }),
-  model: literals("gemini-1.5-pro","gemini-1.5-flash","gemini-1.0-pro","text-embedding-004","aqa"),
+  model: literals("gemini-1.0-pro","gemini-1.0-pro-latest","gemini-1.0-pro-001","gemini-1.5-flash","gemini-1.5-flash-latest","gemini-1.5-pro-latest","gemini-1.5-pro"),
   languages: literals("ar","bn","bg","zh","hr","cs","da","nl",
     "en","et","fi","fr","de","el","iw","hi","hu","id","it","ja",
     "ko","lv","lt","no","pl","pt","ro","ru","sr","sk","sl","es",
