@@ -18,7 +18,7 @@ export const Aside = () => {
     <aside className="hidden border-r bg-muted/40 md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
         <ToggleBtns />
-        <div className="flex-1">
+        <ScrollArea className="flex-1 h-[330px]">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
             {threads &&
               threads.map((thread, idx) => (
@@ -31,7 +31,7 @@ export const Aside = () => {
                 </Link>
               ))}
           </nav>
-        </div>
+        </ScrollArea>
         <div className="mt-auto p-4">
           <Card x-chunk="dashboard-02-chunk-0">
             <CardHeader className="p-2 pt-0 md:p-4">
