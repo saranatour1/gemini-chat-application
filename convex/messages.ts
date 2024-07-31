@@ -3,7 +3,7 @@ import { v } from "convex/values";
 import { internalAction, internalMutation, mutation, query, action, internalQuery } from "./_generated/server";
 import { auth } from "./auth";
 import { getAll, getManyFrom } from "convex-helpers/server/relationships";
-import { chatResponse, model, singleMessageChat, singleOutputResponse } from "./model";
+import { chatResponse, singleMessageChat, singleOutputResponse } from "./model";
 import { Doc, Id } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
 import { DatabaseReader } from "./_generated/server";
@@ -11,17 +11,17 @@ import { getUserSettings } from "./settingsHelpers";
 import { getEntireChat, summarizeThread } from "./threadHelpers";
 import { settingsSchema } from "./schema";
 import { literals } from "convex-helpers/validators";
-import { runModelResponses } from "./messagesHelpers";
+import { mutateStream, runModelResponses } from "./messagesHelpers";
 
 // viewing the message in thread
 export const viewer = query({
   args: { threadId: v.id("threads") },
   handler: async (ctx, args_0) => {
-    const messages = await getManyFrom(ctx.db, "messages", "threadId", args_0.threadId);
+    const messages = await getEntireChat(ctx, args_0.threadId)
     return messages;
   },
 });
-
+// internal query to run later on
 export const threadMessages = internalQuery({
   args: { threadId: v.id("threads") },
   handler: async (ctx, args_0) => {
@@ -34,41 +34,27 @@ export const createMessage = mutation({
   args: { content: v.string(), threadId: v.id("threads") },
   handler: async (ctx, args) => {
     // adding the new message written by the user to the db
-    const user = await auth.getUserId(ctx);
-    const newMessage = await ctx.db.insert("messages", {
+    const user = await auth.getUserId(ctx); // just the userId
+    const newUserMessage = await ctx.db.insert("messages", {
       threadId: args.threadId,
       message: args.content,
       state: "generating",
       author: { role: "user", userId: user! },
     });
+    
     // getting the user settings
     const { settings } = await getUserSettings(ctx);
     await summarizeThread(ctx, args.threadId, settings!);
 
-    await runModelResponses(ctx, newMessage, args.content, args.threadId, settings!);
+    await runModelResponses(ctx, newUserMessage, args.content, args.threadId, settings!);
   },
 });
 
 export const singleMessageResponse = internalAction({
   args: { messageId: v.id("messages"), content: v.string(), threadId: v.id("threads"), settings: v.any() },
   handler: async (ctx, args_0) => {
-    console.log("single chat response");
     const result = await singleMessageChat(args_0.content, args_0.settings);
-    let chunkedText = "";
-    for await (const chunk of result.stream) {
-      const chunkText = chunk.text();
-      chunkedText += chunkText;
-      await ctx.runMutation(internal.messages.setUpMessage, {
-        messageId: args_0.messageId,
-        messageChunk: chunkText,
-        state: "generating",
-      });
-    }
-    await ctx.runMutation(internal.messages.finishJob, {
-      messageId: args_0.messageId,
-      completeMessage: chunkedText, // Send the complete message
-      state: "success",
-    });
+    await mutateStream(ctx, result.stream,args_0.messageId)
   },
 });
 
@@ -83,54 +69,13 @@ export const setUpMessage = internalMutation({
   },
 });
 
-export const finishJob = internalMutation({
-  args: {
-    messageId: v.id("messages"),
-    completeMessage: v.string(),
-    state: literals("success", "generating", "failed"),
-  },
-  handler: async (ctx, args_0) => {
-    await ctx.db.patch(args_0.messageId, {
-      state: "success",
-      message: args_0.completeMessage, // Ensure the message is fully updated
-    });
-  },
-});
-
 // entire chat response
 export const runEntireChat = internalAction({
   args: { settings: v.any(), threadId: v.id("threads"), messageId: v.id("messages") },
   handler: async (ctx, args_0) => {
     const messages = await ctx.runQuery(internal.messages.threadMessages, { threadId: args_0.threadId });
     const result = await chatResponse(messages, args_0.settings);
-    let chunkedList = "";
-    for await (const chunk of result.stream) {
-      chunkedList += chunk.text();
-      console.log("this os the chunk result",chunk.text())
-      await ctx.runMutation(internal.messages.patchStreamMessage, {
-        messageId: args_0.messageId,
-        chunk: chunk.text(),
-        state: "generating",
-      });
-    }
-    await ctx.runMutation(internal.messages.patchStreamMessage, {
-      messageId: args_0.messageId,
-      chunk: chunkedList,
-      state: "success",
-    });
-  },
-});
-
-// patch existing message
-export const patchStreamMessage = internalMutation({
-  args: { messageId: v.id("messages"), chunk: v.string(), state: literals("success", "generating", "failed") },
-  handler: async (ctx, args_0) => {
-    const message = await ctx.db.get(args_0.messageId);
-    const updatedMessage = message?.message + args_0.chunk;
-    await ctx.db.patch(args_0.messageId, {
-      message: updatedMessage,
-      state: args_0.state,
-    });
+    await mutateStream(ctx,result.stream,args_0.messageId)
   },
 });
 
