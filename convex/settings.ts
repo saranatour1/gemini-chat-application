@@ -26,7 +26,7 @@ export const createUserSettings = mutation({
         theme:"light",
         keepChat:(Date.now() + 604800), // 1 week
         languages:"en",
-        model:"gemini-1.0-pro",
+        model:"gemini-1.0-pro-latest",
         attachments:{
           audio:false,
           images:false
