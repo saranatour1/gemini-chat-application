@@ -31,7 +31,7 @@ export const threadMessages = internalQuery({
 
 // creating the messages, either user or system or assistant
 export const createMessage = mutation({
-  args: { content: v.string(), threadId: v.id("threads") },
+  args: { content: v.string(), threadId: v.id("threads"), file:v.optional(v.any()) },
   handler: async (ctx, args) => {
     // adding the new message written by the user to the db
     const user = await auth.getUserId(ctx); // just the userId
@@ -46,7 +46,15 @@ export const createMessage = mutation({
     const { settings } = await getUserSettings(ctx);
     await summarizeThread(ctx, args.threadId, settings!);
 
-    await runModelResponses(ctx, newUserMessage, args.content, args.threadId, settings!);
+    if(args.file instanceof File && args.file !== undefined){
+      await ctx.scheduler.runAfter(0,internal.messages.sendMessageWithAttachment,{
+        threadId:args.threadId,
+        file:args.file,
+        content:args.content
+      })
+    }else{
+      await runModelResponses(ctx, newUserMessage, args.content, args.threadId, settings!);
+    }
   },
 });
 
@@ -85,7 +93,7 @@ export const summarize = internalAction({
   handler: async (ctx, args_0) => {
     const prompt = `write a proper summary that describes the following message ${args_0.firstMessage}, make it small, straight to the point, no longer than 30 characters, don't type anything else other than chat title summary.`;
 
-    await ctx.scheduler.runAfter(5000, internal.messages.actionToSummarize, {
+    await ctx.runAction(internal.messages.actionToSummarize, {
       prompt: prompt,
       threadId: args_0.threadId,
       settings: args_0.settings as Doc<"settings">,
@@ -113,3 +121,10 @@ export const updateSummery = internalMutation({
     });
   },
 });
+
+export const sendMessageWithAttachment = internalAction({
+  args:{threadId:v.id("threads"), file:v.optional(v.any()),content:v.string()},
+  handler(ctx, args_0) {
+    console.log("hey", args_0.file,args_0.threadId, args_0.content)
+  },
+})

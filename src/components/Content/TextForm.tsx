@@ -34,11 +34,13 @@ export const TextForm = ({ threadId }: Props) => {
   const fileRef = form.register("file");
 
   const handleSubmit = (data: MessageFormValues) => {
-    console.log(data);
-    if(data.message){
-      sendMessage({threadId:threadId, content:data.message})
-    }
-    form.reset() // it looks like this is already been working earlier
+    // if(data.file && data.file[0]){
+    //   sendMessage({threadId:threadId, content:data.message, file:data.file[0]})
+    // }else{
+      
+    // }
+    sendMessage({threadId:threadId, content:data.message,})
+    form.reset()
     // form.unregister("file")
   };
 

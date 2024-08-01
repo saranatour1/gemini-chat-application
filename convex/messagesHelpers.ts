@@ -4,7 +4,7 @@ import { Doc, Id } from "./_generated/dataModel";
 import { ActionCtx, MutationCtx } from "./_generated/server";
 import { singleMessageChat } from "./model";
 
-export const runModelResponses = async(ctx:MutationCtx, messageId:Id<"messages">,content:string, threadId:Id<"threads">,settings:Doc<"settings">) =>{
+export const runModelResponses = async(ctx:MutationCtx, messageId:Id<"messages">,content:string, threadId:Id<"threads">,settings:Doc<"settings">, attachment?:File) =>{
   const newMessageUpdate = await ctx.db.insert("messages", {
     threadId: threadId,
     message: "",
@@ -21,7 +21,7 @@ export const runModelResponses = async(ctx:MutationCtx, messageId:Id<"messages">
       threadId:threadId,
       settings:settings
     })
-  } else {
+  } else if(settings.responseType ==="chat") {
     // run for entire chat response
     await ctx.scheduler.runAfter(0, internal.messages.runEntireChat, {
       settings: settings,

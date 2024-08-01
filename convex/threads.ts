@@ -1,9 +1,6 @@
-import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { auth } from "./auth";
-import { Doc } from "./_generated/dataModel";
-import { getAll, getOneFrom, getManyFrom, getManyVia } from "convex-helpers/server/relationships";
-import { model } from "./model";
+import { getAll, getManyFrom } from "convex-helpers/server/relationships";
 
 // get a list of threads user is member in
 export const viewer = query({
