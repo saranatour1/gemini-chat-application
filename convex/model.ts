@@ -1,12 +1,11 @@
-import { Content, GenerationConfig, GoogleGenerativeAI, ModelParams } from "@google/generative-ai";
-import {GoogleAIFileManager} from "@google/generative-ai/server"
-
+import { Content, GenerationConfig, GoogleGenerativeAI } from "@google/generative-ai";
 import { Doc } from "./_generated/dataModel";
-// import { readFileSync } from "node:fs";
 
-const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey as string);
-// const fileManager = new GoogleAIFileManager(apiKey as string)
+export const apiKey = process.env.GEMINI_API_KEY;
+export const genAI = new GoogleGenerativeAI(apiKey as string);
+export type AttachedFiles ={
+  
+}
 
 export const generationConfig:GenerationConfig = {
   temperature: 1,
@@ -50,23 +49,9 @@ export const chatResponse = async (messages: Doc<"messages">[], settings: Partia
   return result
 };
 
-// // chat with attachment 
-// export const chatWithAttachment = async (blob:File,text:string)=>{
 
-//   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // for now its just the "gemini-1.5-flash"
-//   const getResult = await fileManager.getFile(blob.name); // returns file meta data
 
-//   const result = await model.generateContent([
-//     {
-//       fileData: {
-//         mimeType: getResult.mimeType,
-//         fileUri: getResult.uri
-//       }
-//     },
-//     { text: text },
-//   ]);
-//   return result.response.text()
-// }
+
 
 // export function fileToGenerativePart(path:string, mimeType:string) {
 //   return {

@@ -3,7 +3,7 @@ import { v } from "convex/values";
 import { internalAction, internalMutation, mutation, query, action, internalQuery } from "./_generated/server";
 import { auth } from "./auth";
 import { getAll, getManyFrom } from "convex-helpers/server/relationships";
-import { chatResponse, singleMessageChat, singleOutputResponse } from "./model";
+import { apiKey, chatResponse, genAI, singleMessageChat, singleOutputResponse } from "./model";
 import { Doc, Id } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
 import { DatabaseReader } from "./_generated/server";
