@@ -1,4 +1,4 @@
-import { Menu, Link } from "lucide-react";
+import { Menu} from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui/card";
 import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
@@ -6,6 +6,8 @@ import { useQuery } from "convex/react";
 import { usePathname } from "next/navigation";
 import { api } from "../../../convex/_generated/api";
 import { ToggleBtns } from "../SideBar/ToggleBtns";
+import Link from "next/link";
+import { ScrollArea } from "../ui/scroll-area";
 
 export const SheetSummary = () => {
   const threads = useQuery(api.threads.viewer);
@@ -20,6 +22,7 @@ export const SheetSummary = () => {
       </SheetTrigger>
       <SheetContent side="left" className="flex flex-col">
         <ToggleBtns />
+        <ScrollArea className="h-[400px]">
         <nav className="grid gap-2 text-lg font-medium">
           {threads &&
             threads.map((thread, idx) => (
@@ -32,6 +35,7 @@ export const SheetSummary = () => {
               </Link>
             ))}
         </nav>
+        </ScrollArea>
         <div className="mt-auto">
           <Card>
             <CardHeader>
