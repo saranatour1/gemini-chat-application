@@ -47,3 +47,12 @@ export const mutateStream =async(ctx:ActionCtx, stream: AsyncGenerator<EnhancedG
     state: "success",
   });
 }
+
+export const getMessagesFromThreadId = async (ctx: MutationCtx, threadId: Id<"threads">) => {
+  const messages = await ctx.db
+    .query("messages")
+    .withIndex("threadId", (q) => q.eq("threadId", threadId))
+    .order("asc")
+    .take(2);
+  return messages;
+};
