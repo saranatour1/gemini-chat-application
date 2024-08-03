@@ -2,6 +2,8 @@ import { defineSchema, defineTable } from "convex/server";
 import { authTables } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { literals } from "convex-helpers/validators";
+import { rateLimitTables } from "convex-helpers/server/rateLimit";
+
 
 export const settingsSchema = {
   userId: v.id("users"),
@@ -21,6 +23,7 @@ export const settingsSchema = {
 
 const schema = defineSchema({
   ...authTables,
+  ...rateLimitTables,
   settings: defineTable(settingsSchema)
     .index("userId", ["userId"])
     .index("languages", ["languages"]),
