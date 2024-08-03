@@ -1,8 +1,20 @@
 import { mutation, query } from "./_generated/server";
 import { auth } from "./auth";
 import { getAll, getManyFrom } from "convex-helpers/server/relationships";
-import { checkLastThreads } from "./threadHelpers";
-import { ConvexError } from "convex/values";
+import { defineRateLimits } from "convex-helpers/server/rateLimit";
+
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const MAX_GROUP_SIZE = 25;
+
+export const { checkRateLimit, rateLimit, resetRateLimit } = defineRateLimits({
+  createThread: {
+    kind: "token bucket",
+    rate: 1,
+    period: MINUTE,
+    capacity: 2,
+  },
+});
 
 // get a list of threads user is member in
 export const viewer = query({
@@ -27,8 +39,11 @@ export const createThread = mutation({
     // get logged in user
     const user = await auth.getUserId(ctx);
     // create a new thread
-    let lastThread = await checkLastThreads(ctx,user!)
-    if(lastThread){
+    await rateLimit(ctx, {
+      name: "createThread",
+      key: user!,
+      throws: true,
+    });
       const newThread = await ctx.db.insert("threads", {
         summary: "new chat",
       });
@@ -38,9 +53,6 @@ export const createThread = mutation({
         userId: user!,
       });
       return newThread;
-    }else{
-      throw new ConvexError("don't create more than 1 thread in such a short period of time")
-    }
   },
 });
 
