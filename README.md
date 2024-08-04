@@ -44,7 +44,7 @@ I used linear to track my own tickets.
 ### Further tips
 
 - Refer to the providers (github+google) documentation for information on adding client and secret configurations for various providers.
-- this reposotiry helped me a lot while learning how to use convex ->
+- this repo helped me a lot while learning how to use convex ->
   [llama farm chat](https://github.com/get-convex/llama-farm-chat)
 
 ### have fun!
