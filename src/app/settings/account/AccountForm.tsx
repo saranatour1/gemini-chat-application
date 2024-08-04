@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";;
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -53,7 +54,7 @@ export function AccountForm() {
   }
 
   useEffect(() => {
-    console.log(settings, "settings");
+
     if(settings === null){
       createSettings()
     }
