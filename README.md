@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# setup
 
-## Getting Started
+This project is created with [convex](https://www.convex.dev/) along with [nextjs](https://nextjs.org/), so If you want to use this project locally, follow these steps:-
 
-First, run the development server:
+- clone this repository and visit the directory
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/saranatour1/gemini-chat-application.git && cd /gemini-chat-application
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- next download all the dependancies for this project:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  pnpm i
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Since I'm using Convex for my backend option, you will need to head over to [convex](https://www.convex.dev/) and create a free account, and then head over to your terminal again and run the following:
 
-## Learn More
+1. to initialize the project
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+  pnpm dlx convex dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+follow the step guide you will find in your terminal. 2. when ever you create an update or a change, you will need to run that command each time.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# Libraries used
 
-## Deploy on Vercel
+- Next.js
+- Shadcn + Radix UI
+- Tailwind CSS
+- Google Gemini (Stable Models)
+- Convex
+- Convex Auth
+- Convex Function Helpers
+- Shiki
+- Zod & React Hook Form (Form Validation)
+- TypeScript
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# other stuff
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+I used linear to track my own tickets.
+
+### Further tips
+
+- Refer to the providers (github+google) documentation for information on adding client and secret configurations for various providers.
+- this reposotiry helped me a lot while learning how to use convex ->
+  [llama farm chat](https://github.com/get-convex/llama-farm-chat)
+
+### have fun!
