@@ -7,8 +7,10 @@ import { api } from "../../../convex/_generated/api";
 import { AwardIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 export const ToggleBtns = () => {
   const addChat = useMutation(api.threads.createThread);
+  const createSettings = useMutation(api.settings.createUserSettings)
   const nav = useRouter();
   const directToLast = async()=>{
     const lastId = await addChat()
@@ -16,6 +18,11 @@ export const ToggleBtns = () => {
       nav.push(`/dashboard/${lastId}`)
     }
   }
+
+  useEffect(()=>{
+    createSettings()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   return (
     <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
       <TooltipProvider>
