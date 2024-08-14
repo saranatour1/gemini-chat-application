@@ -61,7 +61,7 @@ export const SignUp = () => {
             <input type="hidden" value={flow} name="flow" />
             <Label className="flex flex-col items-start justify-start gap-y-2 w-full">
               <span>Email</span>
-              <Input name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required className=" invalid:border-red-600 transition-colors"/>
+              <Input name="email" type="email"  required className=" invalid:border-red-600 transition-colors"/>
             </Label>
             <Label className="flex flex-col items-start justify-start gap-y-2 w-full">
               <span>Password</span>
@@ -69,7 +69,6 @@ export const SignUp = () => {
                 name="password"
                 type="password"
                 autoComplete={flow === "signIn" ? "current-password" : "new-password"}
-                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
                 className=" invalid:border-red-600 transition-colors"
               />
             </Label>

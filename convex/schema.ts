@@ -46,7 +46,6 @@ const schema = defineSchema({
       }),
       v.object({
         role: v.literal("assistant"),
-        // context: v.array(v.id("messages")),
         model: v.optional(v.string()),
       }),
       v.object({
@@ -58,20 +57,6 @@ const schema = defineSchema({
   })
     .index("state", ["state", "author.userId"])
     .index("threadId", ["threadId"]),
-  jobs: defineTable({
-    work: v.object({
-      responseId: v.id("messages"),
-      stream: v.boolean(),
-    }),
-    status: literals("pending", "inProgress", "success", "failed", "timedOut"),
-    lastUpdate: v.number(),
-    workerId: v.optional(v.id("workers")),
-    janitorId: v.optional(v.id("_scheduled_functions")),
-    start: v.optional(v.number()),
-    end: v.optional(v.number()),
-  })
-    .index("responseId", ["work.responseId"])
-    .index("status", ["status", "lastUpdate"]),
 });
 
 export default schema;

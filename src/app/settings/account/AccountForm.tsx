@@ -53,7 +53,7 @@ export function AccountForm() {
   }
 
   useEffect(() => {
-    console.log(settings, "settings");
+    // console.log(settings, "settings");
     if(settings === null){
       createSettings()
     }
