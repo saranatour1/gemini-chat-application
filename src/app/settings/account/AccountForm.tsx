@@ -21,11 +21,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { accountFormSchema, languagesSet, Model, models, Response, responses } from "./constants";
-import { useEffect } from "react";
 import { Doc, Id } from "../../../../convex/_generated/dataModel";
 
 export function AccountForm() {
-  const createSettings = useMutation(api.settings.createUserSettings)
   const updateSettings = useMutation(api.settings.update)
   const settings = useQuery(api.settings.viewer);
   const formSchema = accountFormSchema(settings as Doc<"settings">)
@@ -52,12 +50,6 @@ export function AccountForm() {
     updateSettings({settingsId:settings?._id as Id<"settings">, body: data as Partial<Doc<"settings">>})
   }
 
-  useEffect(() => {
-    // console.log(settings, "settings");
-    if(settings === null){
-      createSettings()
-    }
-  }, [settings]);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

@@ -5,7 +5,7 @@ import { SidebarNav } from "./compoents/SideNavBar"
 import { UserNavigation } from "@/components/Content/UserNavigation"
 import Link from "next/link"
 import { IoArrowBack } from "react-icons/io5";
-import { AuthenticatedClient } from "@/components/AuthenticadClient"
+import { AuthenticatedClient } from "@/components/AuthClient"
 import { NotSignedIn } from "@/components/NotSignedIn"
 
 
