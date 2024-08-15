@@ -1,15 +1,15 @@
 "use client";
-import { FormEvent, useState } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "./ui/label";
+import { useState } from "react";
+import { Card } from "@/components/ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useConvexAuth } from "convex/react";
 import { useRouter } from "next/navigation";
-import { toast } from "./ui/use-toast";
-import { ToastAction } from "./ui/toast";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 
 export const SignUp = () => {
   const { signIn } = useAuthActions();
@@ -17,26 +17,20 @@ export const SignUp = () => {
   const [submitting, setSubmitting] = useState(false);
   const nav = useRouter();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitting(true);
-    e.currentTarget.checkValidity()
-    const formData = new FormData(e.currentTarget);
+  const formSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8).max(32),
+    flow: z.enum(["signIn", "signUp"]).default("signIn"),
+  });
 
-    const email = formData.get("email");
-    const password = formData.get("password")!.toString();
+  type SignInValues = z.infer<typeof formSchema>;
 
-    if (!email || !password) {
-      // toast({
-      //   variant: "destructive",
-      //   title: "Do not leave empty fields!",
-      //   action: <ToastAction altText="undo">Undo</ToastAction>,
-      // });
-      setSubmitting(false);
-      return;
-    }
+  const form = useForm<SignInValues>({
+    resolver: zodResolver(formSchema),
+  });
 
-    signIn("password", formData)
+  const handleSubmit = (data: SignInValues) => {
+    signIn("password", { ...data, flow: flow })
       .then((req) => nav.push("/dashboard"))
       .catch((e) => {
         console.error(e);
@@ -57,25 +51,61 @@ export const SignUp = () => {
             <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
             <p className="text-sm text-muted-foreground">Enter your email below to create your account</p>
           </div>
-          <form className="w-full flex flex-col items-start justify-start gap-y-4" onSubmit={handleSubmit}>
-            <input type="hidden" value={flow} name="flow" />
-            <Label className="flex flex-col items-start justify-start gap-y-2 w-full">
-              <span>Email</span>
-              <Input name="email" type="email"  required className=" invalid:border-red-600 transition-colors"/>
-            </Label>
-            <Label className="flex flex-col items-start justify-start gap-y-2 w-full">
-              <span>Password</span>
-              <Input
-                name="password"
-                type="password"
-                autoComplete={flow === "signIn" ? "current-password" : "new-password"}
-                className=" invalid:border-red-600 transition-colors"
+          <Form {...form}>
+            <form
+              className="w-full flex flex-col items-start justify-start gap-y-4"
+              onSubmit={form.handleSubmit(handleSubmit)}
+            >
+              <FormField
+                name="flow"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="sr-only hidden">flow</FormLabel>
+                    <FormControl>
+                      <Input type="hidden" />
+                    </FormControl>
+                  </FormItem>
+                )}
               />
-            </Label>
-            <Button className="w-full" type="submit" variant={`outline`}>
-              submit
-            </Button>
-          </form>
+
+              <FormField
+                name="email"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-start justify-start gap-y-2 w-full">
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" required className="transition-colors" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="password"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-start justify-start gap-y-2 w-full">
+                    <FormLabel>password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        required
+                        className="transition-colors"
+                        autoComplete={flow === "signIn" ? "current-password" : "new-password"}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button className="w-full" type="submit" variant={`outline`}>
+                submit
+              </Button>
+            </form>
+          </Form>
           <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
           </div>
