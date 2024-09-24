@@ -7,7 +7,7 @@ import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"; 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 
@@ -27,6 +27,10 @@ export const SignUp = () => {
 
   const form = useForm<SignInValues>({
     resolver: zodResolver(formSchema),
+    defaultValues:{
+      email:"",
+      password:"",
+    }
   });
 
   const handleSubmit = (data: SignInValues) => {
@@ -46,12 +50,12 @@ export const SignUp = () => {
   return (
     <div className="w-full h-full max-h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-1 lg:px-0">
       <div className="lg:p-8">
-        <Card className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] p-6">
+        <Card className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[500px] p-6">
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
             <p className="text-sm text-muted-foreground">Enter your email below to create your account</p>
           </div>
-          <Form {...form}>
+          <Form  {...form}>
             <form
               className="w-full flex flex-col items-start justify-start gap-y-4"
               onSubmit={form.handleSubmit(handleSubmit)}
