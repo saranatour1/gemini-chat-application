@@ -1,6 +1,15 @@
 import { Main } from "@/components/Content/Main";
 import { Id } from "../../../../convex/_generated/dataModel";
 
-export default function page({ params }: { params: { slug: Id<"threads">[] } }){
-  return <Main threadId={params.slug}/>
+interface Slug {
+  slug: Id<"threads">[];
+}
+
+interface Props {
+  params: Promise<Slug>;
+}
+
+export default async function page({ params }: Props) {
+  const { slug: Ids } = await params;
+  return <Main threadId={Ids ?? []} />;
 }
