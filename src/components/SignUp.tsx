@@ -1,17 +1,18 @@
-"use client";
+"use client";;
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { useForm } from "react-hook-form"; 
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { toast } from "./ui/use-toast";
 
-export const SignUp = () => {
+const SignUp = () => {
   const { signIn } = useAuthActions();
   const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
   const [submitting, setSubmitting] = useState(false);
@@ -27,35 +28,40 @@ export const SignUp = () => {
 
   const form = useForm<SignInValues>({
     resolver: zodResolver(formSchema),
-    defaultValues:{
-      email:"",
-      password:"",
-    }
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const handleSubmit = (data: SignInValues) => {
+    setSubmitting(true);
     signIn("password", { ...data, flow: flow })
-      .then((req) => nav.push("/dashboard"))
+      .then((req) => {
+        nav.push("/dashboard")
+        toast({variant:'default', title:`You have successfully ${flow === "signIn" ? 'signed in': "signed up"}!`})
+      })
       .catch((e) => {
         console.error(e);
         const title =
           flow === "signIn"
             ? "Could not sign in, did you mean to sign up?"
             : "Could not sign up, did you mean to sign in?";
-        // toast({ variant: "destructive", title: title });
+        toast({ variant: "destructive", title: title });
         setSubmitting(false);
       });
   };
 
   return (
-    <div className="w-full h-full max-h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-1 lg:px-0">
-      <div className="lg:p-8">
-        <Card className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[500px] p-6">
-          <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
-            <p className="text-sm text-muted-foreground">Enter your email below to create your account</p>
-          </div>
-          <Form  {...form}>
+      <Card className="flex w-full flex-col justify-center space-y-6 p-6 max-w-[40rem] shadow-inner max-sm:max-w-full">
+        <CardHeader className="flex flex-col space-y-2 text-center">
+          <CardTitle className="text-2xl font-semibold tracking-tight">Create an account</CardTitle>
+          <CardDescription className="text-sm text-muted-foreground">
+            Enter your email below to create your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="w-full p-0">
+          <Form {...form}>
             <form
               className="w-full flex flex-col items-start justify-start gap-y-4"
               onSubmit={form.handleSubmit(handleSubmit)}
@@ -91,7 +97,7 @@ export const SignUp = () => {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="flex flex-col items-start justify-start gap-y-2 w-full">
-                    <FormLabel>password</FormLabel>
+                    <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -105,16 +111,18 @@ export const SignUp = () => {
                   </FormItem>
                 )}
               />
-              <Button className="w-full" type="submit" variant={`outline`}>
-                submit
+              <Button disabled={submitting} className="w-full text-white" type="submit" variant={"default"}>
+                {submitting ? "submitting..":"submit"}
               </Button>
             </form>
           </Form>
+        </CardContent>
+        <CardFooter className="w-full flex flex-col items-center justify-center gap-y-4 p-0">
           <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
           </div>
           <Button
-            className="flex items-center justify-center gap-x-4"
+            className="flex items-center justify-center gap-x-4 w-full"
             variant={`outline`}
             onClick={() => void signIn("github", { redirectTo: "/dashboard" })}
           >
@@ -122,7 +130,7 @@ export const SignUp = () => {
             <span>GitHub</span>
           </Button>
           <Button
-            className="flex items-center justify-center gap-x-4"
+            className="flex items-center justify-center gap-x-4 w-full"
             variant={`outline`}
             onClick={() => void signIn("google", { redirectTo: "/dashboard" })}
           >
@@ -138,8 +146,9 @@ export const SignUp = () => {
           >
             {flow === "signIn" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
           </Button>
-        </Card>
-      </div>
-    </div>
+        </CardFooter>
+      </Card>
   );
 };
+
+export default SignUp;
