@@ -11,7 +11,7 @@ export default function Layout({ children }: Children) {
     <SignedIn>
     <SidebarProvider>
     <AppSidebar />
-    <main className="w-full p-4 h-screen max-w-full min-h-screen">
+    <main className="w-full p-4 h-screen max-w-full min-h-screen bg-muted/50">
       <SidebarTrigger />
       {children}
     </main>
