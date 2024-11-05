@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { useMutation } from "convex/react";
 import { CornerDownLeft, Paperclip } from "lucide-react";
 import { api } from "../../../convex/_generated/api";
@@ -12,12 +12,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  threadId: Id<"threads">;
+  threadId?: Id<"threads">;
 }
 export const TextForm = ({ threadId }: Props) => {
+  const createThread = useMutation(api.threads.createThread);
   const sendMessage = useMutation(api.messages.createMessage);
+  const nav = useRouter();
+
+  const directToLast = async () => {
+    const lastId = await createThread();
+    if (lastId) {
+      nav.push(`/dashboard/${lastId}`);
+    }
+    return lastId;
+  };
 
   const messageFormSchema = z.object({
     message: z.string().min(6, {
@@ -33,15 +44,14 @@ export const TextForm = ({ threadId }: Props) => {
   });
   const fileRef = form.register("file");
 
-  const handleSubmit = (data: MessageFormValues) => {
-    // if(data.file && data.file[0]){
-    //   sendMessage({threadId:threadId, content:data.message, file:data.file[0]})
-    // }else{
-      
-    // }
-    sendMessage({threadId:threadId, content:data.message,})
-    form.reset()
-    // form.unregister("file")
+  const handleSubmit = async (data: MessageFormValues) => {
+    if (!threadId) {
+      const newThread = await directToLast();
+      sendMessage({ threadId: newThread, content: data.message });
+    } else {
+      sendMessage({ threadId: threadId, content: data.message });
+    }
+    form.reset();
   };
 
   return (
@@ -79,10 +89,7 @@ export const TextForm = ({ threadId }: Props) => {
                     <Paperclip className="size-4" />
                     <span className="sr-only">Attach file</span>
                     <FormControl>
-                      <Input 
-                      type="file" 
-                      className="hidden"
-                       {...fileRef} />
+                      <Input type="file" className="hidden" {...fileRef} />
                     </FormControl>
                   </FormLabel>
                   <FormMessage />
@@ -95,7 +102,6 @@ export const TextForm = ({ threadId }: Props) => {
             Send Message
             <CornerDownLeft className="size-3.5" />
           </Button>
-
         </div>
       </form>
     </Form>
