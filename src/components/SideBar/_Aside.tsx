@@ -1,7 +1,7 @@
 "use client";
 import { Children } from "@/types";
 import { useState } from "react";
-import { ToggleBtns } from "./ToggleBtns";
+import { ToggleBtns } from "./_ToggleBtns";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";

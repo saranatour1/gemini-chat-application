@@ -5,7 +5,7 @@ import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
 import { useQuery } from "convex/react";
 import { usePathname } from "next/navigation";
 import { api } from "../../../convex/_generated/api";
-import { ToggleBtns } from "../SideBar/ToggleBtns";
+import { ToggleBtns } from "../SideBar/_ToggleBtns";
 import Link from "next/link";
 import { ScrollArea } from "../ui/scroll-area";
 

@@ -1,8 +1,14 @@
+import { TextForm } from "@/components/Content/TextForm";
 
 export default function page() {  
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-        <p className="p-6 flex flex-col items-center justify-center mx-auto">Add a new chat or go back to one of your old ones</p>
+    <div className="w-full h-full items-center justify-center flex flex-col">
+        <h1 className="p-6 flex flex-col items-center justify-center mx-auto col-span-4 text-3xl font-bold font-serif">
+          what can I help you with?
+        </h1>
+        <div className="mx-auto w-full px-32">
+        <TextForm/>
+        </div>
     </div>
   );
 }
