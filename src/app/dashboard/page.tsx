@@ -6,7 +6,7 @@ export default function page() {
         <h1 className="p-6 flex flex-col items-center justify-center mx-auto col-span-4 text-3xl font-bold font-serif">
           what can I help you with?
         </h1>
-        <div className="mx-auto w-full px-32">
+        <div className="mx-auto w-full px-56">
         <TextForm/>
         </div>
     </div>
