@@ -12,8 +12,8 @@ interface Props {
 export const Main = ({ threadId }: Props) => {
   const messages = useQuery(api.messages.viewer, threadId ? { threadId: threadId[0] } : "skip");
   return (
-    <main className="grid flex-1 gap-4 overflow-auto  md:grid-cols-1 lg:grid-cols-1">
-      <div className="relative flex h-full min-h-[40vh] flex-col rounded-xl p-4 lg:col-span-2 px-56">
+    <main className="grid grid-cols-1 w-full max-w-3xl max-sm:max-w-lg justify-center items-center mx-auto">
+      <div className="relative flex h-full min-h-[40vh] flex-col rounded-xl p-4 lg:col-span-2">
         <Badge variant="outline" className="absolute right-3 top-3">
           Output
         </Badge>
