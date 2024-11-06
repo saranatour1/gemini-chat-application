@@ -2,7 +2,6 @@ import { Separator } from "@/components/ui/separator"
 import { Metadata } from "next"
 import Image from "next/image"
 import { SidebarNav } from "./compoents/SideNavBar"
-import { UserNavigation } from "@/components/Content/UserNavigation"
 import Link from "next/link"
 import { IoArrowBack } from "react-icons/io5";
 import { AuthenticatedClient } from "@/components/AuthClient"
@@ -37,7 +36,6 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
       <Link className="flex items-center justify-center gap-x-4" href={`/dashboard`}>
       <IoArrowBack /> dashboard
       </Link>
-      <UserNavigation />
       </div>
       <div className="space-y-6 p-10 pb-16 md:block max-sm:px-6">
         <div className="space-y-0.5">

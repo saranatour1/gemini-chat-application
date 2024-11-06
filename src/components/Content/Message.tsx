@@ -9,7 +9,8 @@ export const Message = ({ message, avatar }: Props) => {
   const {html} = useHtml(message.message)
 
   return (
-    <div className="flex items-start gap-4 rounded-md bg-card p-4">
+    <div className="flex items-start gap-4 rounded-md bg-card p-4 flex-col shadow-sm border">
+      <div className="w-full h-full flex items-center justify-start gap-4 ">
       <Avatar className="border w-10 h-10">
         <AvatarImage
           src={
@@ -20,9 +21,10 @@ export const Message = ({ message, avatar }: Props) => {
         />
         <AvatarFallback>{message.author.role === "user" ? `U` : `A`}</AvatarFallback>
       </Avatar>
-      <div className="grid gap-1">
         <p className="font-medium text-sm">{message.author.role === "user" ? `You` : `Assistant`}</p>
-        <article className="prose w-full" dangerouslySetInnerHTML={{__html:html}}/> 
+      </div>
+      <div className="grid gap-1 w-full max-w-lg">
+        <article className="prose w-full max-sm:break-words max-sm:prose-sm max-sm:text-wrap" dangerouslySetInnerHTML={{__html:html}}/> 
         <span className="sr-only">{message.state}</span>
       </div>
     </div>

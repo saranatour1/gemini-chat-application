@@ -1,5 +1,5 @@
-'use client'
-import { Calendar, Home, Inbox, Plus, Search, Settings } from "lucide-react";
+'use client';
+import { Plus } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -18,45 +18,14 @@ import { api } from "../../../convex/_generated/api";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
-import { UserNavigation } from "../Content/UserNavigation";
 import { NavUser } from "../Content/NavUser";
-import { useAuthActions } from "@convex-dev/auth/react";
 
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
 
 export function AppSidebar() {
   // Add new chat action 
   const addChat = useMutation(api.threads.createThread);
   const createSettings = useMutation(api.settings.createUserSettings)
   const user = useQuery(api.users.viewer);
-  const { signOut } = useAuthActions();
   const nav = useRouter();
 
   const directToLast = async()=>{
