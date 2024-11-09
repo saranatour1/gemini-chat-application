@@ -1,6 +1,6 @@
 // get messages in thread
 import { v } from "convex/values";
-import { internalAction, internalMutation, mutation, query, action, internalQuery } from "./_generated/server";
+import { internalAction, query, action, internalQuery } from "./_generated/server";
 import { auth } from "./auth";
 import { getAll, getManyFrom } from "convex-helpers/server/relationships";
 import { chatResponse, singleMessageChat, singleOutputResponse } from "./model";
@@ -12,6 +12,7 @@ import { getEntireChat, summarizeThread } from "./threadHelpers";
 import { settingsSchema } from "./schema";
 import { literals } from "convex-helpers/validators";
 import { mutateStream, runModelResponses } from "./messagesHelpers";
+import { internalMutation, mutation } from "./functions";
 
 // viewing the message in thread
 export const viewer = query({

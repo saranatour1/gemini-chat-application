@@ -1,7 +1,8 @@
-import { mutation, query } from "./_generated/server";
+import { query } from "./_generated/server";
 import { auth } from "./auth";
 import { getAll, getManyFrom } from "convex-helpers/server/relationships";
 import { defineRateLimits } from "convex-helpers/server/rateLimit";
+import { mutation } from "./functions";
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;

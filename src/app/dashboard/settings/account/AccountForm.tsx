@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "../../../../../convex/_generated/api";
 import { Calendar } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { accountFormSchema, languagesSet, Model, models, Response, responses } from "./constants";
-import { Doc, Id } from "../../../../convex/_generated/dataModel";
+import { Doc, Id } from "../../../../../convex/_generated/dataModel";
 
 export function AccountForm() {
   const updateSettings = useMutation(api.settings.update)
@@ -35,7 +35,6 @@ export function AccountForm() {
     defaultValues: {
       // model:settings?.model ?? "gemini-1.0-pro",
       languages: settings?.languages ?? "en",
-      theme: settings?.theme ?? "light",
       attachments:{
         audio: settings?.attachments.audio ?? false,
         images:settings?.attachments.images ?? false,
@@ -203,34 +202,6 @@ export function AccountForm() {
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name="theme"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>theme</FormLabel>
-              <FormControl>
-                <Select value={field.value} 
-                onValueChange={(value:"light"|"dark") => field.onChange(form.setValue("theme", value))}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="theme" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["dark", "light"].map((response, idx) => (
-                      <SelectItem key={idx} value={response}>
-                        {response}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>This is the theme that will be used in the dashboard.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <Button type="submit">Update account</Button>
       </form>
     </Form>
