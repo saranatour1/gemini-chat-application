@@ -1,6 +1,7 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { query } from "./_generated/server";
 import { auth } from "./auth";
+import { mutation } from "./functions";
 
 export const viewer = query({
   args:{},

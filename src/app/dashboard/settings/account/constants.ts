@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Doc } from "../../../../convex/_generated/dataModel";
+import { Doc } from "../../../../../convex/_generated/dataModel";
 
 export const languagesSet: [string, ...string[]] = [
   "ar",
@@ -59,7 +59,6 @@ export const accountFormSchema = (settings: Doc<"settings">) => {
       .enum(["gemini-1.0-pro","gemini-1.0-pro-latest","gemini-1.0-pro-001","gemini-1.5-flash","gemini-1.5-flash-latest","gemini-1.5-pro-latest","gemini-1.5-pro"])
       .default(settings?.model ?? "gemini-1.0-pro-latest"),
     languages: z.enum(languagesSet).default(settings?.languages ?? "en"),
-    theme: z.enum(["light", "dark"]).default(settings?.theme ?? "light"),
   });
 };
 

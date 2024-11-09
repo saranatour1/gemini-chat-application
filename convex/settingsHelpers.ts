@@ -18,7 +18,6 @@ export const updateUserSettings = async(ctx:MutationCtx)=>{
     await ctx.db.insert('settings',{
       userId: userId as Id<"users">,
       responseType:"single-message",
-      theme:"light",
       keepChat:(Date.now() + 604800), // 1 week
       languages:"en",
       model:"gemini-1.0-pro-latest",

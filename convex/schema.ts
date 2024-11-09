@@ -8,7 +8,7 @@ import { rateLimitTables } from "convex-helpers/server/rateLimit";
 export const settingsSchema = {
   userId: v.id("users"),
   responseType: literals("chat","single-message"),
-  theme:literals("dark","light"),
+  theme: v.optional(literals("dark","light")),
   keepChat: v.number(), // How long to keep the chats for // max of 30 days
   attachments:v.object({
       audio: v.boolean(),

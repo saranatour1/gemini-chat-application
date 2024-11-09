@@ -35,7 +35,6 @@ export function AccountForm() {
     defaultValues: {
       // model:settings?.model ?? "gemini-1.0-pro",
       languages: settings?.languages ?? "en",
-      theme: settings?.theme ?? "light",
       attachments:{
         audio: settings?.attachments.audio ?? false,
         images:settings?.attachments.images ?? false,
@@ -203,34 +202,6 @@ export function AccountForm() {
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name="theme"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>theme</FormLabel>
-              <FormControl>
-                <Select value={field.value} 
-                onValueChange={(value:"light"|"dark") => field.onChange(form.setValue("theme", value))}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="theme" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["dark", "light"].map((response, idx) => (
-                      <SelectItem key={idx} value={response}>
-                        {response}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>This is the theme that will be used in the dashboard.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <Button type="submit">Update account</Button>
       </form>
     </Form>
