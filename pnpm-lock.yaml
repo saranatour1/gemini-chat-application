@@ -14,6 +14,9 @@ importers:
       '@convex-dev/auth':
         specifier: ^0.0.50
         version: 0.0.50(convex@1.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@convex-dev/migrations':
+        specifier: ^0.2.1
+        version: 0.2.1(convex@1.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@google/generative-ai':
         specifier: ^0.16.1
         version: 0.16.1
@@ -207,6 +210,11 @@ packages:
         optional: true
       react:
         optional: true
+
+  '@convex-dev/migrations@0.2.1':
+    resolution: {integrity: sha512-n4vBPk3IURqvnpFR5wLs9cPeTlBmTTyvtbdE3Mda6CrbpBrEm9t6B9jmPkioqsi1PSS4ezg4yYd8qDj7n0Bo5A==}
+    peerDependencies:
+      convex: ~1.16.5 || ~1.17.0
 
   '@emnapi/core@0.45.0':
     resolution: {integrity: sha512-DPWjcUDQkCeEM4VnljEOEcXdAD7pp8zSZsgOujk/LGIwCXWbXJngin+MO4zbH429lzeC3WbYLGjE2MaUOwzpyw==}
@@ -3300,6 +3308,10 @@ snapshots:
       - '@simplewebauthn/browser'
       - '@simplewebauthn/server'
       - nodemailer
+
+  '@convex-dev/migrations@0.2.1(convex@1.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
+    dependencies:
+      convex: 1.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   '@emnapi/core@0.45.0':
     dependencies:
