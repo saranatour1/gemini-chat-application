@@ -1,16 +1,16 @@
-"use client";;
+"use client";
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@ui/card";
+import { Input } from "@ui/input";
+import { Button } from "@ui/button";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { toast } from "./ui/use-toast";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/form";
+import { toast } from "@ui/use-toast";
 
 const SignUp = () => {
   const { signIn } = useAuthActions();

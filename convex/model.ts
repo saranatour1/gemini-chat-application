@@ -1,12 +1,13 @@
+/**
+ * @see https://ai.google.dev/gemini-api/docs/models/gemini
+ */
 import { Content, GenerationConfig, GoogleGenerativeAI, ModelParams } from "@google/generative-ai";
-import {GoogleAIFileManager} from "@google/generative-ai/server"
 
 import { Doc } from "./_generated/dataModel";
-// import { readFileSync } from "node:fs";
+import { action } from "./_generated/server";
 
-const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey as string);
-// const fileManager = new GoogleAIFileManager(apiKey as string)
+const apiKey = process.env.GEMINI_API_KEY!;
+const genAI = new GoogleGenerativeAI(apiKey);
 
 export const generationConfig:GenerationConfig = {
   temperature: 1,
@@ -18,11 +19,11 @@ export const generationConfig:GenerationConfig = {
 
 // return a response of a stream for a single message
 export const singleMessageChat = async (message: string, settings: Partial<Doc<"settings">>) => {
-  const model = genAI.getGenerativeModel({ model: settings.model as string})
+  const model = genAI.getGenerativeModel({ model: settings.model ? settings.model: 'gemini-1.5-flash'})
   const result = await model.generateContentStream(message);
   return result;
 };
-
+// why ?
 export const singleOutputResponse = async (message: string, settings: Partial<Doc<"settings">>) => {
   const model = genAI.getGenerativeModel({ model: settings.model as string})
   const result = await model.generateContent(message);
@@ -33,7 +34,7 @@ export const singleOutputResponse = async (message: string, settings: Partial<Do
 export const chatResponse = async (messages: Doc<"messages">[], settings: Partial<Doc<"settings">>) => {
   // const model = genAI.getGenerativeModel({ model: settings.model as string});
   const model = genAI.getGenerativeModel({ model: settings.model as string})
-  const history:Content[] = messages.map((singleMessage, index) => {
+  const history:Content[] = messages.map((singleMessage) => {
     return {
       role: singleMessage.author.role === "assistant" ? "model" : "user",
       parts: [{
@@ -41,6 +42,8 @@ export const chatResponse = async (messages: Doc<"messages">[], settings: Partia
       }],
     };
   });
+
+  console.info("message history", history)
 
   const chatSession = model.startChat({
     generationConfig,
@@ -50,29 +53,9 @@ export const chatResponse = async (messages: Doc<"messages">[], settings: Partia
   return result
 };
 
-// // chat with attachment 
-// export const chatWithAttachment = async (blob:File,text:string)=>{
-
-//   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // for now its just the "gemini-1.5-flash"
-//   const getResult = await fileManager.getFile(blob.name); // returns file meta data
-
-//   const result = await model.generateContent([
-//     {
-//       fileData: {
-//         mimeType: getResult.mimeType,
-//         fileUri: getResult.uri
-//       }
-//     },
-//     { text: text },
-//   ]);
-//   return result.response.text()
-// }
-
-// export function fileToGenerativePart(path:string, mimeType:string) {
-//   return {
-//     inlineData: {
-//       data: Buffer.from(readFileSync(path)).toString("base64"),
-//       mimeType
-//     },
-//   };
-// }
+export const getModelInformation = action({
+  args:{},
+  handler(ctx, args_0) {
+    
+  },
+})

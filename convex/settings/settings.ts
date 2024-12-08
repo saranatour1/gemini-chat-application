@@ -1,9 +1,9 @@
 import { v } from "convex/values";
-import {  query } from "./_generated/server";
+import {  query } from "@convex/_generated/server";
 import { getUserSettings, updateUserSettings } from "./settingsHelpers";
 import { partial } from "convex-helpers/validators";
-import { settingsSchema } from "./schema";
-import { mutation } from "./functions";
+import { settingsSchema } from "@convex/schema";
+import { mutation } from "@convex/functions";
 
 export const viewer = query({
   args:{},

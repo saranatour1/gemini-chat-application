@@ -1,13 +1,13 @@
 "use client";;
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Button } from "@ui/button";
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@ui/form";
+import { Input } from "@ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
+import { Form } from "@ui/form";
 import { useMutation } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "@convex/_generated/api";
 
 const profileFormSchema = z.object({
   name: z
@@ -23,7 +23,7 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export function ProfileForm() {
-  const updateName = useMutation(api.users.updateName);
+  const updateName = useMutation(api.users.users.updateName);
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     mode: "onChange",

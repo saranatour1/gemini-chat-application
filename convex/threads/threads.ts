@@ -1,8 +1,8 @@
-import { query } from "./_generated/server";
-import { auth } from "./auth";
+import { query } from "@convex/_generated/server";
 import { getAll, getManyFrom } from "convex-helpers/server/relationships";
 import { defineRateLimits } from "convex-helpers/server/rateLimit";
-import { mutation } from "./functions";
+import { mutation } from "@convex/functions";
+import { getCurrentUser } from "@convex/users/userHelpers";
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -22,9 +22,9 @@ export const viewer = query({
   args: {},
   handler: async (ctx, args_0) => {
     // get the logged in user
-    const user = await auth.getUserId(ctx);
+    const user = await getCurrentUser(ctx)
     // get an array that shows the threads the user is Member In (user <-> thread)
-    const threadsUserIsMemberIn = await getManyFrom(ctx.db, "threadsMembers", "userId", user!);
+    const threadsUserIsMemberIn = await getManyFrom(ctx.db, "threadsMembers", "userId", user?._id!);
     // get all the Threads, by name and summary
     const threads = await getAll(
       ctx.db,
@@ -38,11 +38,11 @@ export const createThread = mutation({
   args: {},
   handler: async (ctx, args_0) => {
     // get logged in user
-    const user = await auth.getUserId(ctx);
+    const user = await getCurrentUser(ctx);
     // create a new thread
     await rateLimit(ctx, {
       name: "createThread",
-      key: user!,
+      key: user?._id,
       throws: true,
     });
       const newThread = await ctx.db.insert("threads", {
@@ -51,7 +51,7 @@ export const createThread = mutation({
       // add user to thread
       await ctx.db.insert("threadsMembers", {
         threadId: newThread,
-        userId: user!,
+        userId: user?._id!,
       });
       return newThread;
   },
@@ -60,10 +60,10 @@ export const createThread = mutation({
 export const getLast = query({
   args: {},
   handler: async (ctx, args_0) => {
-    const user = await auth.getUserId(ctx);
+    const user = await getCurrentUser(ctx)
     const userIsMember = await ctx.db
       .query("threadsMembers")
-      .withIndex("userId", (q) => q.eq("userId", user!))
+      .withIndex("userId", (q) => q.eq("userId", user?._id!))
       .order("desc")
       .first();
     const thread = await ctx.db.query("threads").withIndex("by_id", (q) => q.eq("_id", userIsMember!.threadId));

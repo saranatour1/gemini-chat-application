@@ -11,6 +11,7 @@
   "dependencies": {
     "@auth/core": "^0.36.0",
     "@convex-dev/auth": "^0.0.75",
+    "@convex-dev/migrations": "^0.2.1",
     "@google/generative-ai": "^0.16.1",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -37,7 +38,7 @@
     "react": "^18.3.1",
     "react-day-picker": "8.10.1",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.53.2",
+    "react-hook-form": "^7.54.0",
     "react-icons": "^5.4.0",
     "rehype": "^13.0.2",
     "rehype-stringify": "^10.0.1",

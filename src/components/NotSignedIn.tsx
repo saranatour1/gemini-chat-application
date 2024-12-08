@@ -1,6 +1,6 @@
 'use client'
 import { Unauthenticated } from "convex/react"
-import { buttonVariants } from "./ui/button"
+import { buttonVariants } from "@ui/button"
 import Link from "next/link"
 export const NotSignedIn = ()=>{
   return (<Unauthenticated>

@@ -1,5 +1,5 @@
-import { Main } from "@/components/Content/Main";
-import { Id } from "../../../../convex/_generated/dataModel";
+import { Main } from "@sections/Content/Main";
+import { Id } from "@convex/_generated/dataModel";
 
 interface Slug {
   slug: Id<"threads">[];

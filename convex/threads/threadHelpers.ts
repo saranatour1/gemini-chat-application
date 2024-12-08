@@ -1,8 +1,8 @@
 import { getManyFrom } from "convex-helpers/server/relationships";
-import { internal } from "./_generated/api";
-import { Doc, Id } from "./_generated/dataModel";
-import { MutationCtx, QueryCtx } from "./_generated/server";
-import { getMessagesFromThreadId } from "./messagesHelpers";
+import { internal } from "../_generated/api";
+import { Doc, Id } from "../_generated/dataModel";
+import { MutationCtx, QueryCtx } from "../_generated/server";
+import { getMessagesFromThreadId } from "@convex/messages/messagesHelpers";
 
 // summarize thread through first messages
 export const summarizeThread = async (ctx: MutationCtx, threadId: Id<"threads">, settings:Doc<"settings">) => {
@@ -11,7 +11,7 @@ export const summarizeThread = async (ctx: MutationCtx, threadId: Id<"threads">,
     .withIndex("threadId", (q) => q.eq("threadId", threadId))
     .collect();
   if (firstMessage.length === 1) {
-    await ctx.scheduler.runAfter(0, internal.messages.summarize, {
+    await ctx.scheduler.runAfter(0, internal.messages.messages.summarize, {
       threadId: threadId,
       firstMessage: firstMessage[0].message,
       settings:settings

@@ -1,4 +1,4 @@
-import { TextForm } from "@/components/Content/TextForm";
+import { TextForm } from "@sections/Content/TextForm";
 
 export default function page() {
   return (

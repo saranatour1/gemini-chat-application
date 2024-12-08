@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Provider } from "../components/Provider";
-import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/toaster"
+import { Provider } from "@sections/Provider";
+import { cn } from "@utils/utils";
+import { Toaster } from "@ui/toaster"
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 
 const fontSans = Inter({

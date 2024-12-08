@@ -1,4 +1,4 @@
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@ui/separator";
 import { ProfileForm } from "./ProfileForm";
 
 export default function SettingsProfilePage() {

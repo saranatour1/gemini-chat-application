@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Doc } from "../../../../../convex/_generated/dataModel";
+import { Doc } from "@convex/_generated/dataModel";
 
 export const languagesSet: [string, ...string[]] = [
   "ar",
