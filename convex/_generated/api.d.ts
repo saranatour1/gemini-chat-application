@@ -9,7 +9,6 @@
  */
 
 import type * as auth from "../auth.js";
-import type * as constants from "../constants.js";
 import type * as functions from "../functions.js";
 import type * as http from "../http.js";
 import type * as messages_messages from "../messages/messages.js";
@@ -38,7 +37,6 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
-  constants: typeof constants;
   functions: typeof functions;
   http: typeof http;
   "messages/messages": typeof messages_messages;
