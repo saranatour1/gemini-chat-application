@@ -19,7 +19,7 @@ export const updateUserSettings = async(ctx:MutationCtx)=>{
       responseType:"single-message",
       keepChat:(Date.now() + 604800), // 1 week
       languages:"en",
-      model:"gemini-1.0-pro-latest",
+      model:"gemini-1.0-pro",
       attachments:{
         audio:false,
         images:false
