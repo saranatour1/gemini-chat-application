@@ -1,6 +1,6 @@
 import { Mic, Pause } from "lucide-react";
-import { Button, buttonVariants } from "../ui/button";
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip";
+import { Button, buttonVariants } from "@ui/button";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@ui/tooltip";
 import { useEffect, useRef, useState } from "react";
 export const Microphone = () => {
   const [record, setRecord] = useState(false);

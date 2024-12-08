@@ -1,9 +1,9 @@
 "use client";;
-import { Badge } from "../ui/badge";
-import { ScrollArea } from "../ui/scroll-area";
-import { Id } from "../../../convex/_generated/dataModel";
+import { Badge } from "@ui/badge";
+import { ScrollArea } from "@ui/scroll-area";
+import { Id } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { api } from "@convex/_generated/api";
 import { Message } from "./Message";
 import { TextForm } from "./TextForm";
 interface Props {

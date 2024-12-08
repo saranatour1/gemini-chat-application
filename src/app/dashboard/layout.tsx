@@ -1,7 +1,7 @@
-import { NotSignedIn } from "@/components/NotSignedIn";
-import { AppSidebar } from "@/components/SideBar/AppSideBar";
-import { SignedIn } from "@/components/SignedIn";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { NotSignedIn } from "@sections/NotSignedIn";
+import { AppSidebar } from "@sections/SideBar/AppSideBar";
+import { SignedIn } from "@sections/SignedIn";
+import { SidebarProvider, SidebarTrigger } from "@ui/sidebar";
 import { Children } from "@/types";
 
 export default function Layout({ children }: Children) {

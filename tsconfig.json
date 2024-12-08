@@ -19,6 +19,11 @@
       }
     ],
     "paths": {
+      "@convex/*":["./convex/*"],
+      "@ui/*":["./src/components/ui/*"],
+      "@hooks/*":["./src/hooks/*"],
+      "@utils/*":["./src/lib/*"],
+      "@sections/*":["./src/components/*"],
       "@/*": ["./src/*"]
     }
   },

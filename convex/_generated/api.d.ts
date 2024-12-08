@@ -24,7 +24,7 @@ import type * as settingsHelpers from "../settingsHelpers.js";
 import type * as threadHelpers from "../threadHelpers.js";
 import type * as threads from "../threads.js";
 import type * as userHelpers from "../userHelpers.js";
-import type * as users from "../users.js";
+import type * as users_users from "../users/users.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -46,7 +46,7 @@ declare const fullApi: ApiFromModules<{
   threadHelpers: typeof threadHelpers;
   threads: typeof threads;
   userHelpers: typeof userHelpers;
-  users: typeof users;
+  "users/users": typeof users_users;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

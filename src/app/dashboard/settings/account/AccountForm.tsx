@@ -1,17 +1,17 @@
 "use client";;
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { Button } from "@ui/button";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
+import { cn } from "@utils/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../../../convex/_generated/api";
-import { Calendar } from "@/components/ui/calendar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { api } from "@convex/_generated/api";
+import { Calendar } from "@ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/select";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -19,9 +19,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@ui/dropdown-menu";
 import { accountFormSchema, languagesSet, Model, models, Response, responses } from "./constants";
-import { Doc, Id } from "../../../../../convex/_generated/dataModel";
+import { Doc, Id } from "@convex/_generated/dataModel";
 
 export function AccountForm() {
   const updateSettings = useMutation(api.settings.update)

@@ -1,6 +1,6 @@
-import { Doc } from "../../../convex/_generated/dataModel";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useHtml } from '../../hooks/useHtml';
+import { Doc } from "@convex/_generated/dataModel";
+import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
+import { useHtml } from '@hooks/useHtml';
 interface Props {
   avatar?: string;
   message: Doc<"messages">;

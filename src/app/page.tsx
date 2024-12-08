@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
-const SignUp = lazy(()=> import('@/components/SignUp'))
+const SignUp = lazy(()=> import('@sections/SignUp'))
 import type { Metadata } from 'next'
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@ui/skeleton";
 
 export const metadata: Metadata = {
   title: 'User Authentication',

@@ -1,4 +1,4 @@
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@ui/tooltip";
 import { Children } from "@/types";
 export const AttachFiles = ({ children }: Children) => {
   return (

@@ -1,17 +1,17 @@
 "use client";
 import { useMutation } from "convex/react";
 import { CornerDownLeft, Paperclip } from "lucide-react";
-import { api } from "../../../convex/_generated/api";
-import { Id } from "../../../convex/_generated/dataModel";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+import { api } from "@convex/_generated/api";
+import { Id } from "@convex/_generated/dataModel";
+import { Button } from "@ui/button";
+import { Textarea } from "@ui/textarea";
 import { AttachFiles } from "./AttatchFiles";
 import { Microphone } from "./Microphone";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/form";
+import { Input } from "@ui/input";
 import { useRouter } from "next/navigation";
 
 interface Props {
