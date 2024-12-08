@@ -64,7 +64,14 @@ export const accountFormSchema = (settings: Doc<"settings">) => {
         "gemini-1.0-pro-vision-001",
         "gemini-1.0-pro",
         "gemini-1.0-pro-001",
-        "gemini-1.0-pro-002"])
+        "gemini-1.0-pro-002",
+        "gemini-1.0-pro",
+        "gemini-1.0-pro-latest",
+        "gemini-1.5-flash",
+        "gemini-1.5-flash-latest",
+        "gemini-1.5-pro-latest",
+        "gemini-1.5-pro",
+      ])
       .default(settings?.model ?? "gemini-1.5-pro-001"),
     languages: z.enum(languagesSet).default(settings?.languages ?? "en"),
   });
