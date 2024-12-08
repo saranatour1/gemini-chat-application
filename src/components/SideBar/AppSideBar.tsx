@@ -23,8 +23,8 @@ import { NavUser } from "@sections/Content/NavUser";
 
 export function AppSidebar() {
   // Add new chat action 
-  const addChat = useMutation(api.threads.createThread);
-  const createSettings = useMutation(api.settings.createUserSettings)
+  const addChat = useMutation(api.threads.threads.createThread);
+  const createSettings = useMutation(api.settings.settings.createUserSettings)
   const user = useQuery(api.users.users.viewer);
   const nav = useRouter();
 
@@ -41,7 +41,7 @@ export function AppSidebar() {
   },[])
 
   // Note: needs to be moved
-  const threads = useQuery(api.threads.viewer);
+  const threads = useQuery(api.threads.threads.viewer);
   const pathname = usePathname();
 
   return (

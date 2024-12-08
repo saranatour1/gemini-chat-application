@@ -18,8 +18,8 @@ interface Props {
   threadId?: Id<"threads">;
 }
 export const TextForm = ({ threadId }: Props) => {
-  const createThread = useMutation(api.threads.createThread);
-  const sendMessage = useMutation(api.messages.createMessage);
+  const createThread = useMutation(api.threads.threads.createThread);
+  const sendMessage = useMutation(api.messages.messages.createMessage);
   const nav = useRouter();
 
   const directToLast = async () => {

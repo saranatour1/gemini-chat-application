@@ -1,8 +1,8 @@
 import { EnhancedGenerateContentResponse } from "@google/generative-ai";
-import { internal } from "./_generated/api";
-import { Doc, Id } from "./_generated/dataModel";
-import { ActionCtx, MutationCtx } from "./_generated/server";
-import { singleMessageChat } from "./model";
+import { internal } from "@convex/_generated/api";
+import { Doc, Id } from "@convex/_generated/dataModel";
+import { ActionCtx, MutationCtx } from "@convex/_generated/server";
+import { singleMessageChat } from "@convex/model";
 
 export const runModelResponses = async(ctx:MutationCtx, messageId:Id<"messages">,content:string, threadId:Id<"threads">,settings:Doc<"settings">, attachment?:File) =>{
   const newMessageUpdate = await ctx.db.insert("messages", {
@@ -15,7 +15,7 @@ export const runModelResponses = async(ctx:MutationCtx, messageId:Id<"messages">
   });
 
   if (settings.responseType === "single-message") {
-    await ctx.scheduler.runAfter(0, internal.messages.singleMessageResponse,{
+    await ctx.scheduler.runAfter(0, internal.messages.messages.singleMessageResponse,{
       messageId:newMessageUpdate,
       content:content,
       threadId:threadId,
@@ -23,7 +23,7 @@ export const runModelResponses = async(ctx:MutationCtx, messageId:Id<"messages">
     })
   } else if(settings.responseType ==="chat") {
     // run for entire chat response
-    await ctx.scheduler.runAfter(0, internal.messages.runEntireChat, {
+    await ctx.scheduler.runAfter(0, internal.messages.messages.runEntireChat, {
       settings: settings,
       threadId: threadId,
       messageId: newMessageUpdate, // to patch by the model
@@ -35,13 +35,13 @@ export const mutateStream =async(ctx:ActionCtx, stream: AsyncGenerator<EnhancedG
   let chunkedText = "";
   for await (const chunk of stream){
     chunkedText += chunk.text()
-    await ctx.runMutation(internal.messages.setUpMessage, {
+    await ctx.runMutation(internal.messages.messages.setUpMessage, {
       messageId: messageId,
       messageChunk: chunk.text(),
       state: "generating",
     });
   }
-  await ctx.runMutation(internal.messages.setUpMessage, {
+  await ctx.runMutation(internal.messages.messages.setUpMessage, {
     messageId: messageId,
     messageChunk: "", // Send the complete message
     state: "success",

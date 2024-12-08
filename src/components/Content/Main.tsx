@@ -10,7 +10,7 @@ interface Props {
   threadId: Id<"threads">[];
 }
 export const Main = ({ threadId }: Props) => {
-  const messages = useQuery(api.messages.viewer, threadId ? { threadId: threadId[0] } : "skip");
+  const messages = useQuery(api.messages.messages.viewer, threadId ? { threadId: threadId[0] } : "skip");
   return (
     <main className="grid grid-cols-1 w-full max-w-3xl max-sm:max-w-lg justify-center items-center mx-auto">
       <div className="relative flex h-full min-h-[40vh] flex-col rounded-xl p-4 lg:col-span-2">

@@ -24,8 +24,8 @@ import { accountFormSchema, languagesSet, Model, models, Response, responses } f
 import { Doc, Id } from "@convex/_generated/dataModel";
 
 export function AccountForm() {
-  const updateSettings = useMutation(api.settings.update)
-  const settings = useQuery(api.settings.viewer);
+  const updateSettings = useMutation(api.settings.settings.update)
+  const settings = useQuery(api.settings.settings.viewer);
   const formSchema = accountFormSchema(settings as Doc<"settings">)
 
   type AccountFormValues = z.infer<typeof formSchema>;

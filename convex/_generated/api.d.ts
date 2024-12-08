@@ -16,14 +16,14 @@ import type {
 import type * as auth from "../auth.js";
 import type * as functions from "../functions.js";
 import type * as http from "../http.js";
-import type * as messages from "../messages.js";
-import type * as messagesHelpers from "../messagesHelpers.js";
+import type * as messages_messages from "../messages/messages.js";
+import type * as messages_messagesHelpers from "../messages/messagesHelpers.js";
 import type * as model from "../model.js";
-import type * as settings from "../settings.js";
-import type * as settingsHelpers from "../settingsHelpers.js";
-import type * as threadHelpers from "../threadHelpers.js";
-import type * as threads from "../threads.js";
-import type * as userHelpers from "../userHelpers.js";
+import type * as settings_settings from "../settings/settings.js";
+import type * as settings_settingsHelpers from "../settings/settingsHelpers.js";
+import type * as threads_threadHelpers from "../threads/threadHelpers.js";
+import type * as threads_threads from "../threads/threads.js";
+import type * as users_userHelpers from "../users/userHelpers.js";
 import type * as users_users from "../users/users.js";
 
 /**
@@ -38,14 +38,14 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   functions: typeof functions;
   http: typeof http;
-  messages: typeof messages;
-  messagesHelpers: typeof messagesHelpers;
+  "messages/messages": typeof messages_messages;
+  "messages/messagesHelpers": typeof messages_messagesHelpers;
   model: typeof model;
-  settings: typeof settings;
-  settingsHelpers: typeof settingsHelpers;
-  threadHelpers: typeof threadHelpers;
-  threads: typeof threads;
-  userHelpers: typeof userHelpers;
+  "settings/settings": typeof settings_settings;
+  "settings/settingsHelpers": typeof settings_settingsHelpers;
+  "threads/threadHelpers": typeof threads_threadHelpers;
+  "threads/threads": typeof threads_threads;
+  "users/userHelpers": typeof users_userHelpers;
   "users/users": typeof users_users;
 }>;
 export declare const api: FilterApi<
