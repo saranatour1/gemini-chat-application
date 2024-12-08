@@ -1,3 +1,6 @@
+/**
+ * @see https://ai.google.dev/gemini-api/docs/models/gemini
+ */
 import { Content, GenerationConfig, GoogleGenerativeAI, ModelParams } from "@google/generative-ai";
 
 import { Doc } from "./_generated/dataModel";

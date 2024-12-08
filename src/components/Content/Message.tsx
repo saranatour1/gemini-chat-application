@@ -6,7 +6,7 @@ interface Props {
   message: Doc<"messages">;
 }
 export const Message = ({ message, avatar }: Props) => {
-  const {html} = useHtml(message.message)
+  const { html } = useHtml(message.message)
 
   return (
     <div className="flex items-start gap-4 rounded-md bg-card p-4 flex-col shadow-sm border">
