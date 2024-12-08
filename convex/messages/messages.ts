@@ -71,6 +71,7 @@ export const setUpMessage = internalMutation({
     const updatedMessage = existingMessage!.message + args_0.messageChunk;
     await ctx.db.patch(args_0.messageId, {
       message: updatedMessage,
+      state:"success"
     });
   },
 });
