@@ -12,7 +12,7 @@
     "@auth/core": "^0.36.0",
     "@convex-dev/auth": "^0.0.75",
     "@convex-dev/migrations": "^0.2.1",
-    "@google/generative-ai": "^0.16.1",
+    "@google/generative-ai": "^0.21.0",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",

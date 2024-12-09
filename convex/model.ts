@@ -1,7 +1,7 @@
 /**
  * @see https://ai.google.dev/gemini-api/docs/models/gemini
  */
-import { Content, GenerationConfig, GoogleGenerativeAI, ModelParams } from "@google/generative-ai";
+import { Content, DynamicRetrievalMode, GenerationConfig, GoogleGenerativeAI, ModelParams } from "@google/generative-ai";
 
 import { Doc } from "./_generated/dataModel";
 import { action } from "./_generated/server";
@@ -17,6 +17,20 @@ export const generationConfig:GenerationConfig = {
   responseMimeType: "text/plain",
 };
 
+const params:Partial<ModelParams> = 
+  {
+    tools: [
+      {
+        googleSearchRetrieval: {
+          dynamicRetrievalConfig: {
+            mode: DynamicRetrievalMode.MODE_DYNAMIC,
+            dynamicThreshold: 0.7,
+          },
+        },
+      },
+    ],
+  }
+
 // return a response of a stream for a single message
 export const singleMessageChat = async (message: string, settings: Partial<Doc<"settings">>) => {
   const model = genAI.getGenerativeModel({ model: settings.model ? settings.model: 'gemini-1.5-flash'})
@@ -25,7 +39,7 @@ export const singleMessageChat = async (message: string, settings: Partial<Doc<"
 };
 // why ?
 export const singleOutputResponse = async (message: string, settings: Partial<Doc<"settings">>) => {
-  const model = genAI.getGenerativeModel({ model: settings.model as string})
+  const model = genAI.getGenerativeModel({ model: settings.model as string, })
   const result = await model.generateContent(message);
   return result;
 };
