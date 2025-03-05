@@ -71,6 +71,18 @@ export const accountFormSchema = (settings: Doc<"settings">) => {
         "gemini-1.5-flash-latest",
         "gemini-1.5-pro-latest",
         "gemini-1.5-pro",
+        // All the above are deprecated
+          // All the above are deprecated
+        "gemini-2.0-flash",
+        "gemini-2.0-flash-lite",
+        "gemini-1.5-flash",
+        "gemini-1.5-flash-8b",
+        "gemini-1.5-pro",
+        "text-embedding-004",
+        // Experimental models 
+        "gemini-2.0-pro-exp-02-05",
+        "gemini-2.0-flash-thinking-exp-01-21",
+        "learnlm-1.5-pro-experimental",
       ])
       .default(settings?.model ?? "gemini-1.5-pro-001"),
     languages: z.enum(languagesSet).default(settings?.languages ?? "en"),
@@ -88,7 +100,19 @@ export const models = ["gemini-1.5-flash-001",
   "gemini-1.0-pro-vision-001",
   "gemini-1.0-pro",
   "gemini-1.0-pro-001",
-  "gemini-1.0-pro-002"] as const
+  "gemini-1.0-pro-002",
+  // All the above are deprecated
+  "gemini-2.0-flash",
+  "gemini-2.0-flash-lite",
+  "gemini-1.5-flash",
+  "gemini-1.5-flash-8b",
+  "gemini-1.5-pro",
+  "text-embedding-004",
+  // Experimental models 
+  "gemini-2.0-pro-exp-02-05",
+  "gemini-2.0-flash-thinking-exp-01-21",
+  "learnlm-1.5-pro-experimental",
+] as const
 
   export type Model = typeof models[number];
 

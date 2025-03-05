@@ -10,6 +10,10 @@ export const metadata: Metadata = {
 
 const sidebarNavItems = [
   {
+    title:"Home",
+    href:"/dashboard",
+  },
+  {
     title: "settings",
     href: "/dashboard/settings",
   },
