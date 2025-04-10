@@ -60,7 +60,7 @@ export const Main = ({ threadId }: Props) => {
           Output
         </Badge>
         <div className="flex-1 mt-6">
-          <ScrollArea className="w-full max-w-full h-[650px] py-8" ref={scrollAreaRef}>
+          <ScrollArea className="w-full max-w-full h-[500px] py-8" ref={scrollAreaRef}>
             <div className="grid gap-4">
               {messages && messages.map((message, idx) => <Message message={message} key={idx} />)}
             </div>
