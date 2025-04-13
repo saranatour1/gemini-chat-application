@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth/core": "^0.36.0",
-    "@convex-dev/auth": "^0.0.75",
-    "@convex-dev/migrations": "^0.2.1",
+    "@auth/core": "^0.37.0",
+    "@convex-dev/auth": "^0.0.81",
+    "@convex-dev/migrations": "^0.2.5",
     "@google/generative-ai": "^0.16.1",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -30,8 +30,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
-    "convex": "^1.17.3",
-    "convex-helpers": "^0.1.65",
+    "convex": "^1.23.0",
+    "convex-helpers": "^0.1.79",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.414.0",
     "next": "15.1.2",
