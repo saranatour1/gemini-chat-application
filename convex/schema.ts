@@ -6,30 +6,18 @@ import { rateLimitTables } from "convex-helpers/server/rateLimit";
 
 export const settingsSchema = {
   userId: v.id("users"),
+  /** @deprecated unused, removing soon*/ 
   responseType: v.optional(literals("chat", "single-message")),
+  /** @deprecated unused, removing soon*/ 
   theme: v.optional(v.optional(literals("dark", "light"))),
+  /** @deprecated unused, removing soon*/ 
   keepChat: v.optional(v.number()), // How long to keep the chats for // max of 30 days
+  /** @deprecated unused, removing soon*/ 
   attachments: v.optional(v.object({
     audio: v.boolean(),
     images: v.boolean(),
   })),
-  model: v.optional(
-    literals(
-      "gemini-1.5-flash-001",
-      "gemini-1.5-flash-002",
-      "gemini-1.5-pro-001",
-      "gemini-1.5-pro-002",
-      "gemini-1.0-pro-001",
-      "gemini-1.0-pro-vision-001",
-      "gemini-1.0-pro-002",
-      "gemini-1.0-pro",
-      "gemini-1.0-pro-latest",
-      "gemini-1.5-flash",
-      "gemini-1.5-flash-latest",
-      "gemini-1.5-pro-latest",
-      "gemini-1.5-pro",
-    )
-  ),
+  /** @deprecated unused, removing soon*/ 
   languages: v.optional(literals(
     "ar",
     "bn",
@@ -70,6 +58,23 @@ export const settingsSchema = {
     "uk",
     "vi"
   )),
+  model: v.optional(
+    literals(
+      "gemini-1.5-flash-001",
+      "gemini-1.5-flash-002",
+      "gemini-1.5-pro-001",
+      "gemini-1.5-pro-002",
+      "gemini-1.0-pro-001",
+      "gemini-1.0-pro-vision-001",
+      "gemini-1.0-pro-002",
+      "gemini-1.0-pro",
+      "gemini-1.0-pro-latest",
+      "gemini-1.5-flash",
+      "gemini-1.5-flash-latest",
+      "gemini-1.5-pro-latest",
+      "gemini-1.5-pro",
+    )
+  ),
 };
 
 const schema = defineSchema({
