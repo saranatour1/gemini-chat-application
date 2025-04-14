@@ -23,3 +23,25 @@ export const defaultValue = migrations.define({
     }
   }
 })
+// 
+export const deprecateUnusedSettingsEntries = migrations.define({
+  table:"settings",
+  migrateOne:async (ctx,setting)=>{
+    if(setting.languages){
+      await ctx.db.patch(setting._id, { languages:undefined})
+    }
+    if(setting.responseType){
+      await ctx.db.patch(setting._id, { responseType:undefined})
+    }
+    if(setting.theme){
+      await ctx.db.patch(setting._id, { theme:undefined})
+    }
+    if(setting.keepChat){
+      await ctx.db.patch(setting._id, { keepChat:undefined})
+    }
+
+    if(setting.attachments){
+      await ctx.db.patch(setting._id, { attachments:undefined})
+    }
+  }
+})
