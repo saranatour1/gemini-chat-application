@@ -6,13 +6,13 @@ import { rateLimitTables } from "convex-helpers/server/rateLimit";
 
 export const settingsSchema = {
   userId: v.id("users"),
-  responseType: literals("chat", "single-message"),
-  theme: v.optional(literals("dark", "light")),
-  keepChat: v.number(), // How long to keep the chats for // max of 30 days
-  attachments: v.object({
+  responseType: v.optional(literals("chat", "single-message")),
+  theme: v.optional(v.optional(literals("dark", "light"))),
+  keepChat: v.optional(v.number()), // How long to keep the chats for // max of 30 days
+  attachments: v.optional(v.object({
     audio: v.boolean(),
     images: v.boolean(),
-  }),
+  })),
   model: v.optional(
     literals(
       "gemini-1.5-flash-001",
@@ -30,7 +30,7 @@ export const settingsSchema = {
       "gemini-1.5-pro",
     )
   ),
-  languages: literals(
+  languages: v.optional(literals(
     "ar",
     "bn",
     "bg",
@@ -69,7 +69,7 @@ export const settingsSchema = {
     "tr",
     "uk",
     "vi"
-  ),
+  )),
 };
 
 const schema = defineSchema({
