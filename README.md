@@ -1,3 +1,5 @@
+# Small update 
+ I am no longer working on this app, I recommend using the `ai` package and the `ai-sdk` from vercel to make sure that the package is up to date with the updates from Gemeni API!    
 # setup
 
 This project is created with [convex](https://www.convex.dev/) along with [nextjs](https://nextjs.org/), so If you want to use this project locally, follow these steps:-
